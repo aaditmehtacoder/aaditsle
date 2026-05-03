@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "How Well Do You Know Aadit?",
-  description: "A Kahoot-style SLE graduation quiz for Queen of Apostles."
+  description: "A Kahoot-style SLE graduation quiz for QoFa."
 };
 
 export const viewport = {

@@ -52,6 +52,7 @@ export default function PlayerPage() {
   const [name, setName] = useState("");
   const [code, setCode] = useState("");
   const [message, setMessage] = useState("");
+  const [messageKind, setMessageKind] = useState<"info" | "success" | "error">("info");
   const [joining, setJoining] = useState(false);
   const [sendingAnswer, setSendingAnswer] = useState<number | null>(null);
   const [joinStep, setJoinStep] = useState<JoinStep>("code");
@@ -63,6 +64,7 @@ export default function PlayerPage() {
   const [gamePlayers, setGamePlayers] = useState<Player[]>([]);
   const [answerPoints, setAnswerPoints] = useState(0);
   const [countdownLeft, setCountdownLeft] = useState(COUNTDOWN_SECONDS);
+  const [suggestedGame, setSuggestedGame] = useState<GameState | null>(null);
 
   const faceEmojis = ["😎", "🤓", "🤠", "🥳", "👽", "🤖", "👻", "🦄", "🦁", "🐶", "🦊", "🦖", "🚀", "⭐", "🌟", "🏆", "🎓", "🎯", "🧠", "📚"];
 
@@ -83,6 +85,21 @@ export default function PlayerPage() {
   const playerRank = playerRankIndex >= 0 ? playerRankIndex + 1 : null;
   const playerAhead = playerRankIndex > 0 ? rankedGamePlayers[playerRankIndex - 1] : null;
   const pointsBehind = player && playerAhead ? Math.max(0, playerAhead.score - player.score) : 0;
+
+  useEffect(() => {
+    async function loadSuggestedGame() {
+      const { data } = await supabase
+        .from('games')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      const latestGame = Array.isArray(data) && data.length > 0 ? data[0] : null;
+      if (latestGame) setSuggestedGame(latestGame as GameState);
+    }
+
+    loadSuggestedGame();
+  }, []);
 
   // Sync timer
   useEffect(() => {
@@ -194,13 +211,16 @@ export default function PlayerPage() {
   async function handleCodeNext() {
     if (!code.trim()) {
       setMessage("Enter a class code to continue.");
+      setMessageKind("error");
       return;
     }
+    setMessageKind("success");
     setMessage("Checking code...");
     const { data, error } = await supabase.from('games').select('*').eq('code', code.trim().toUpperCase()).single();
 
     if (error || !data) {
       setMessage("Class code not found.");
+      setMessageKind("error");
       return;
     }
 
@@ -214,9 +234,24 @@ export default function PlayerPage() {
     setJoinStep("name");
   }
 
+  async function useSuggestedGame() {
+    if (!suggestedGame) return;
+    setCode(suggestedGame.code);
+    setGame(suggestedGame);
+    const { data: playersData } = await supabase
+      .from('players')
+      .select('id,name,score')
+      .eq('game_id', suggestedGame.id);
+    setGamePlayers((playersData as Player[]) || []);
+    setMessage("");
+    setMessageKind("success");
+    setJoinStep("name");
+  }
+
   async function handleNameSubmit() {
     if (!name.trim()) {
       setMessage("Enter your name to join.");
+      setMessageKind("error");
       return;
     }
 
@@ -235,6 +270,7 @@ export default function PlayerPage() {
 
       if (existing && existing.length > 0) {
         setMessage("That name is already taken. Try a different one!");
+        setMessageKind("error");
         setJoining(false);
         return;
       }
@@ -249,6 +285,7 @@ export default function PlayerPage() {
 
       if (error) {
         setMessage("Could not join game.");
+        setMessageKind("error");
         return;
       }
 
@@ -323,6 +360,7 @@ export default function PlayerPage() {
     setCode("");
     setJoinStep("code");
     setMessage("");
+    setMessageKind("info");
   }
 
   const joined = Boolean(player && game);
@@ -344,13 +382,20 @@ export default function PlayerPage() {
               <p className="subtitle">
                 {joinStep === "code"
                   ? "Enter the class code shown on the projector."
-                  : "This is how you'll appear on the leaderboard."}
+                  : "Please enter your real name when you join."}
               </p>
             </div>
 
             <div className="join-form">
               {joinStep === "code" && (
                 <>
+                  {suggestedGame && (
+                    <button className="current-game-card" onClick={useSuggestedGame}>
+                      <span>Is this your game?</span>
+                      <strong>{suggestedGame.code}</strong>
+                      <em>Tap to use this code</em>
+                    </button>
+                  )}
                   <div className="input-group">
                     <label htmlFor="code-input">Class Code</label>
                     <input
@@ -410,7 +455,7 @@ export default function PlayerPage() {
                 </>
               )}
 
-              {message && <div className="message error">{message}</div>}
+              {message && <div className={`message ${messageKind}`}>{message}</div>}
             </div>
           </div>
         </section>

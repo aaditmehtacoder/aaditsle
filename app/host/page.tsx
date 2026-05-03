@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 import { questions, sleRounds } from "@/lib/quiz-data";
 import CircularTimer from "@/components/CircularTimer";
 import AnimatedScore from "@/components/AnimatedScore";
 import { createClient } from "@/utils/supabase/client";
-import { COUNTDOWN_SECONDS, countdownLeftFor, generateClassCode, maxPointsFor, QUESTION_SECONDS, timeLeftFor } from "@/utils/game-logic";
+import { calculateQuestionPoints, COUNTDOWN_SECONDS, countdownLeftFor, generateClassCode, maxPointsFor, QUESTION_SECONDS, timeLeftFor } from "@/utils/game-logic";
 import { Trash2 } from "lucide-react";
 
 type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks";
 type Player = { id: string; name: string; score: number; joinedAt: number };
-type Answer = { id: string; player_id: string; choice: number; correct: boolean };
+type Answer = { id: string; player_id: string; question_index: number; choice: number; correct: boolean };
 type GameState = {
   id: string;
   code: string;
@@ -25,6 +25,12 @@ type GameState = {
 
 const letters = ["A", "B", "C", "D"];
 const confettiColors = ["#6366f1", "#14b8a6", "#f97316", "#ef4444", "#facc15", "#3b82f6"];
+const botNames = [
+  "Mia", "Leo", "Sofia", "Noah", "Emma", "Eli", "Ava", "Mateo", "Luna", "Owen",
+  "Zoe", "Mason", "Nina", "Lucas", "Ella", "Kai", "Ruby", "Miles", "Ivy", "Theo",
+  "Grace", "Liam", "Maya", "Jack", "Chloe", "Henry", "Aria", "Logan", "Nora", "Ezra",
+  "Layla", "Finn", "Stella", "Caleb", "Jade"
+];
 
 export default function HostPage() {
   const [game, setGame] = useState<GameState | null>(null);
@@ -38,8 +44,9 @@ export default function HostPage() {
   const [kickModal, setKickModal] = useState<{ id: string; name: string } | null>(null);
   const [countdownLeft, setCountdownLeft] = useState(COUNTDOWN_SECONDS);
   const [scoreBaselines, setScoreBaselines] = useState<Record<string, number>>({});
+  const botAnswerKeys = useRef(new Set<string>());
 
-  const supabase = createClient();
+  const supabase = useMemo(() => createClient(), []);
 
   const question = game ? questions[game.current_question] : null;
   const questionMaxPoints = question ? maxPointsFor(question.pointsMultiplier ?? 1) : 1000;
@@ -48,6 +55,19 @@ export default function HostPage() {
     () => [...players].sort((a, b) => b.score - a.score),
     [players]
   );
+  const answerCounts = useMemo(() => {
+    const counts = [0, 0, 0, 0];
+    if (!game) return counts;
+    answers
+      .filter(answer => answer.question_index === game.current_question)
+      .forEach(answer => {
+        if (answer.choice >= 0 && answer.choice <= 3) counts[answer.choice] += 1;
+      });
+    return counts;
+  }, [answers, game?.current_question]);
+  const currentAnswerTotal = answerCounts.reduce((total, count) => total + count, 0);
+  const maxAnswerCount = Math.max(...answerCounts, 1);
+  const botCount = players.filter(player => player.id.startsWith("bot_")).length;
 
   useEffect(() => {
     setJoinUrl(window.location.origin);
@@ -127,11 +147,75 @@ export default function HostPage() {
 
   useEffect(() => {
     if (!game || game.phase !== 'question' || game.revealed) return;
-    if (players.length === 0 || answers.length < players.length) return;
+    if (players.length === 0 || currentAnswerTotal < players.length) return;
 
     const id = window.setTimeout(() => hostAction('reveal'), 450);
     return () => window.clearTimeout(id);
-  }, [answers.length, players.length, game?.phase, game?.revealed]);
+  }, [currentAnswerTotal, players.length, game?.phase, game?.revealed]);
+
+  useEffect(() => {
+    if (!game || !question || game.phase !== "question" || game.revealed) return;
+
+    const answeredIds = new Set(
+      answers
+        .filter(answer => answer.question_index === game.current_question)
+        .map(answer => answer.player_id)
+    );
+    const botsToAnswer = players.filter(player => {
+      const answerKey = `${game.id}:${game.current_question}:${player.id}`;
+      return player.id.startsWith("bot_") && !answeredIds.has(player.id) && !botAnswerKeys.current.has(answerKey);
+    });
+
+    if (botsToAnswer.length === 0) return;
+
+    const timeouts = botsToAnswer.map((bot, index) => {
+      const answerKey = `${game.id}:${game.current_question}:${bot.id}`;
+      botAnswerKeys.current.add(answerKey);
+
+      const idParts = bot.id.split("_");
+      const botIndex = Number(idParts[idParts.length - 1]) || index;
+      const choice = (botIndex + game.current_question) % letters.length;
+      const delay = 650 + index * 360 + ((botIndex * 137) % 540);
+
+      return window.setTimeout(async () => {
+        const { data: latestGame } = await supabase
+          .from("games")
+          .select("phase,revealed,current_question,question_started_at")
+          .eq("id", game.id)
+          .single();
+
+        if (
+          !latestGame ||
+          latestGame.phase !== "question" ||
+          latestGame.revealed ||
+          latestGame.current_question !== game.current_question
+        ) {
+          return;
+        }
+
+        const isCorrect = choice === question.correct;
+        const botTimeLeft = timeLeftFor(latestGame.phase, latestGame.question_started_at);
+        const earnedPoints = calculateQuestionPoints(isCorrect, question.pointsMultiplier ?? 1, botTimeLeft);
+        const { error } = await supabase.from("answers").insert({
+          game_id: game.id,
+          player_id: bot.id,
+          question_index: game.current_question,
+          choice,
+          correct: isCorrect
+        } as any);
+
+        if (!error && earnedPoints > 0) {
+          const currentScore = players.find(player => player.id === bot.id)?.score ?? bot.score;
+          await supabase
+            .from("players")
+            .update({ score: currentScore + earnedPoints } as any)
+            .eq("id", bot.id);
+        }
+      }, delay);
+    });
+
+    return () => timeouts.forEach(timeout => window.clearTimeout(timeout));
+  }, [game?.id, game?.phase, game?.revealed, game?.current_question, players.length, question]);
 
   useEffect(() => {
     if (!game || game.phase !== 'countdown') return;
@@ -167,6 +251,7 @@ export default function HostPage() {
     if (!game) return;
 
     if (action === "reset") {
+      botAnswerKeys.current.clear();
       await initializeGame();
       return;
     }
@@ -174,6 +259,7 @@ export default function HostPage() {
     const updates: Partial<GameState> = {};
 
     if (action === "start") {
+      botAnswerKeys.current.clear();
       updates.phase = 'welcome';
       updates.current_question = 0;
       updates.revealed = false;
@@ -263,6 +349,21 @@ export default function HostPage() {
     setKickModal(null);
   }
 
+  async function addStressBots() {
+    if (!game || botCount > 0) return;
+
+    const stamp = Date.now();
+    const bots = botNames.map((name, index) => ({
+      id: `bot_${stamp}_${String(index + 1).padStart(2, "0")}`,
+      game_id: game.id,
+      name: `${name} Bot ${String(index + 1).padStart(2, "0")}`,
+      score: 0,
+      joined_at: stamp + index
+    }));
+
+    await supabase.from("players").insert(bots as any);
+  }
+
   function launchConfetti() {
     setConfetti(Array.from({ length: 100 }, (_, i) => i));
     window.setTimeout(() => setConfetti([]), 6000);
@@ -273,7 +374,7 @@ export default function HostPage() {
       if (!game) return;
       if (event.code === "Space" && game.phase === "question") {
         event.preventDefault();
-        hostAction(game.revealed ? "next" : "reveal");
+        if (game.revealed) hostAction("next");
       }
     }
     window.addEventListener("keydown", shortcuts);
@@ -394,11 +495,18 @@ export default function HostPage() {
 
           <div className="button-row">
             <button
+              className="btn btn-ghost btn-lg stress-bot-btn"
+              onClick={addStressBots}
+              disabled={botCount > 0}
+            >
+              {botCount > 0 ? `${botCount} Bots Ready` : "Add 35 Test Bots"}
+            </button>
+            <button
               className="btn btn-primary btn-lg"
               onClick={() => hostAction("start")}
               disabled={players.length === 0}
             >
-              Start Quiz →
+              Start Game →
             </button>
           </div>
         </section>
@@ -408,7 +516,7 @@ export default function HostPage() {
       {game.phase === "welcome" && (
         <section className="host-full-screen welcome-full">
           <div className="welcome-card">
-            <div className="badge accent center-x">QoA 8th Grade SLE Project</div>
+            <div className="badge accent center-x">QoFa 8th Grade SLE Project</div>
             <h1>Welcome</h1>
             <p>How Well Do You Know Aadit?</p>
             <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
@@ -439,11 +547,11 @@ export default function HostPage() {
 
       {/* ── QUESTION ── */}
       {game.phase === "question" && question && (
-        <section className="host-full-screen">
+        <section className={`host-full-screen ${game.revealed ? "revealed" : "answering"}`}>
           <div className="host-top-bar">
             <div className="stat-pill">
               <span className="stat-label">Answers</span>
-              <span className="stat-value">{answers.length} / {players.length}</span>
+              <span className="stat-value">{currentAnswerTotal} / {players.length}</span>
             </div>
             <CircularTimer timeLeft={timeLeft} revealed={game.revealed} size="lg" />
             <div className="stat-pill">
@@ -477,24 +585,42 @@ export default function HostPage() {
             ))}
           </div>
 
+          {game.revealed && (
+            <div className="host-reveal-results">
+              <div className="host-answer-chart final" aria-label="Final answer counts">
+                {answerCounts.map((count, index) => (
+                  <div className={`answer-chart-column ${letters[index].toLowerCase()}`} key={letters[index]}>
+                    <div className="answer-chart-top">
+                      <strong>{count}</strong>
+                    </div>
+                    <div className="answer-chart-track">
+                      <div
+                        className="answer-chart-fill"
+                        style={{
+                          height: count === 0 ? "0%" : `${Math.max(8, (count / maxAnswerCount) * 100)}%`,
+                          minHeight: count === 0 ? 0 : 8
+                        }}
+                      />
+                    </div>
+                    <div className="answer-chart-letter">{letters[index]}</div>
+                  </div>
+                ))}
+              </div>
+              <div className="host-story-toast host-story-panel">{question.story}</div>
+            </div>
+          )}
+
           <div className="host-bottom-bar">
             <div className="points-info">
               <span className="points-val">+{questionMaxPoints}</span>
               <span className="points-label">Points</span>
             </div>
-            
-            {game.revealed && <div className="host-story-toast">{question.story}</div>}
-
             <div className="host-actions">
-              {!game.revealed ? (
-                <button className="btn btn-primary btn-xl" onClick={() => hostAction("reveal")}>
-                  Reveal Answer
-                </button>
-              ) : (
+              {game.revealed ? (
                 <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
                   Next →
                 </button>
-              )}
+              ) : null}
             </div>
           </div>
         </section>
@@ -572,7 +698,7 @@ export default function HostPage() {
           <div className="welcome-card">
             <div className="badge green center-x">Presentation Complete</div>
             <h1>Thank You</h1>
-            <p>Thank you for playing and for being part of my QoA journey.</p>
+            <p>Thank you for playing and for being part of my QoFa journey.</p>
             <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
               Back to Lobby
             </button>

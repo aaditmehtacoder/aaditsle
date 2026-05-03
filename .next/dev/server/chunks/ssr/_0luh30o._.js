@@ -15,7 +15,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 const metadata = {
     title: "How Well Do You Know Aadit?",
-    description: "A Kahoot-style SLE graduation quiz for Queen of Apostles."
+    description: "A Kahoot-style SLE graduation quiz for QoFa."
 };
 const viewport = {
     width: "device-width",

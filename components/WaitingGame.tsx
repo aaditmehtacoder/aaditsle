@@ -315,18 +315,24 @@ export default function WaitingGame({ onHighScore }: { onHighScore?: (score: num
     };
 
     const inputTarget = gameWrap || canvas;
-    inputTarget.addEventListener("pointerdown", handleInput);
-    inputTarget.addEventListener("mousedown", handleInput);
-    inputTarget.addEventListener("touchstart", handleInput, { passive: false });
-    inputTarget.addEventListener("click", handleInput);
+    const supportsPointer = "PointerEvent" in window;
+
+    if (supportsPointer) {
+      inputTarget.addEventListener("pointerdown", handleInput);
+    } else {
+      inputTarget.addEventListener("touchstart", handleInput, { passive: false });
+      inputTarget.addEventListener("mousedown", handleInput);
+    }
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId);
-      inputTarget.removeEventListener("pointerdown", handleInput);
-      inputTarget.removeEventListener("mousedown", handleInput);
-      inputTarget.removeEventListener("touchstart", handleInput);
-      inputTarget.removeEventListener("click", handleInput);
+      if (supportsPointer) {
+        inputTarget.removeEventListener("pointerdown", handleInput);
+      } else {
+        inputTarget.removeEventListener("touchstart", handleInput);
+        inputTarget.removeEventListener("mousedown", handleInput);
+      }
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
