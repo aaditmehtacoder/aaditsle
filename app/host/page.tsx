@@ -44,6 +44,7 @@ export default function HostPage() {
   const [kickModal, setKickModal] = useState<{ id: string; name: string } | null>(null);
   const [countdownLeft, setCountdownLeft] = useState(COUNTDOWN_SECONDS);
   const [scoreBaselines, setScoreBaselines] = useState<Record<string, number>>({});
+  const [testBotsEnabled, setTestBotsEnabled] = useState(false);
   const botAnswerKeys = useRef(new Set<string>());
 
   const supabase = useMemo(() => createClient(), []);
@@ -65,9 +66,42 @@ export default function HostPage() {
       });
     return counts;
   }, [answers, game?.current_question]);
+  const answerNamesByChoice = useMemo(() => {
+    const names = [[], [], [], []] as string[][];
+    if (!game) return names;
+
+    const playerNames = new Map(players.map(player => [player.id, player.name]));
+    answers
+      .filter(answer => answer.question_index === game.current_question)
+      .forEach(answer => {
+        if (answer.choice < 0 || answer.choice > 3) return;
+        const playerName = playerNames.get(answer.player_id);
+        if (!playerName) return;
+        names[answer.choice].push(playerName.replace(/^\p{Emoji_Presentation}\s*/u, "").trim() || playerName);
+      });
+
+    return names.map(choiceNames => choiceNames.sort((a, b) => a.localeCompare(b)));
+  }, [answers, players, game?.current_question]);
+  const playerStreaks = useMemo(() => {
+    const streaks: Record<string, number> = {};
+    if (!game) return streaks;
+
+    players.forEach(player => {
+      let streak = 0;
+      for (let questionIndex = game.current_question; questionIndex >= 0; questionIndex -= 1) {
+        const answer = answers.find(entry => entry.player_id === player.id && entry.question_index === questionIndex);
+        if (!answer || !answer.correct) break;
+        streak += 1;
+      }
+      streaks[player.id] = streak;
+    });
+
+    return streaks;
+  }, [answers, players, game?.current_question]);
   const currentAnswerTotal = answerCounts.reduce((total, count) => total + count, 0);
   const maxAnswerCount = Math.max(...answerCounts, 1);
   const botCount = players.filter(player => player.id.startsWith("bot_")).length;
+  const qrJoinUrl = game && joinUrl ? `${joinUrl}/?code=${encodeURIComponent(game.code)}` : joinUrl;
 
   useEffect(() => {
     setJoinUrl(window.location.origin);
@@ -292,7 +326,6 @@ export default function HostPage() {
           updates.pending_sle_index = null;
           updates.question_started_at = Date.now();
           setScoreBaselines(baselinesFrom(players));
-          setAnswers([]);
         }
       } else if (game.phase === 'leaderboard') {
         if (atFinalQuestion && game.pending_sle_index === q.roundIndex) {
@@ -307,7 +340,6 @@ export default function HostPage() {
           updates.pending_sle_index = null;
           updates.question_started_at = Date.now();
           setScoreBaselines(baselinesFrom(players));
-          setAnswers([]);
         }
       } else {
         updates.phase = 'leaderboard';
@@ -321,7 +353,6 @@ export default function HostPage() {
       updates.pending_sle_index = null;
       updates.question_started_at = Date.now();
       setScoreBaselines(baselinesFrom(players));
-      setAnswers([]);
     }
 
     if (action === "next" && game.phase === 'thanks') {
@@ -364,6 +395,24 @@ export default function HostPage() {
     await supabase.from("players").insert(bots as any);
   }
 
+  async function toggleTestBots() {
+    if (!game) return;
+
+    if (testBotsEnabled) {
+      setTestBotsEnabled(false);
+      botAnswerKeys.current.clear();
+      await supabase
+        .from("players")
+        .delete()
+        .eq("game_id", game.id)
+        .like("id", "bot_%");
+      setPlayers(prev => prev.filter(player => !player.id.startsWith("bot_")));
+      return;
+    }
+
+    setTestBotsEnabled(true);
+  }
+
   function launchConfetti() {
     setConfetti(Array.from({ length: 100 }, (_, i) => i));
     window.setTimeout(() => setConfetti([]), 6000);
@@ -400,6 +449,7 @@ export default function HostPage() {
                   onKeyDown={(e) => e.key === "Enter" && password === "cwb" && setHostAuth(true)}
                   placeholder="Password"
                   autoFocus
+                  suppressHydrationWarning
                 />
               </div>
               <button 
@@ -459,8 +509,8 @@ export default function HostPage() {
                 </div>
                 <div className="qr-wrapper">
                   <QRCodeSVG
-                    value={joinUrl}
-                    size={140}
+                    value={qrJoinUrl}
+                    size={190}
                     bgColor="#ffffff"
                     fgColor="#0f0f11"
                     level="M"
@@ -486,6 +536,9 @@ export default function HostPage() {
                   <div className="player-card" key={p.id} onClick={() => kickPlayer(p.id, p.name)}>
                     <div className="player-card-emoji">{emoji}</div>
                     <span className="player-card-name">{baseName}</span>
+                    {(playerStreaks[p.id] ?? 0) > 1 && (
+                      <span className="player-card-streak">🔥 {playerStreaks[p.id]}</span>
+                    )}
                     <Trash2 className="player-card-trash" size={16} />
                   </div>
                 );
@@ -494,19 +547,29 @@ export default function HostPage() {
           )}
 
           <div className="button-row">
-            <button
-              className="btn btn-ghost btn-lg stress-bot-btn"
-              onClick={addStressBots}
-              disabled={botCount > 0}
-            >
-              {botCount > 0 ? `${botCount} Bots Ready` : "Add 35 Test Bots"}
-            </button>
+            <div className="host-test-controls">
+              <button
+                className={`btn btn-ghost btn-lg test-mode-toggle ${testBotsEnabled ? "active" : ""}`}
+                onClick={toggleTestBots}
+              >
+                {testBotsEnabled ? "Test Bots: On" : "Test Bots: Off"}
+              </button>
+              {testBotsEnabled && (
+                <button
+                  className="btn btn-ghost btn-lg stress-bot-btn"
+                  onClick={addStressBots}
+                  disabled={botCount > 0}
+                >
+                  {botCount > 0 ? `${botCount} Bots Ready` : "Add 35 Test Bots"}
+                </button>
+              )}
+            </div>
             <button
               className="btn btn-primary btn-lg"
               onClick={() => hostAction("start")}
               disabled={players.length === 0}
             >
-              Start Game →
+              Start Round
             </button>
           </div>
         </section>
@@ -588,8 +651,16 @@ export default function HostPage() {
           {game.revealed && (
             <div className="host-reveal-results">
               <div className="host-answer-chart final" aria-label="Final answer counts">
-                {answerCounts.map((count, index) => (
-                  <div className={`answer-chart-column ${letters[index].toLowerCase()}`} key={letters[index]}>
+                {answerCounts.map((count, index) => {
+                  const selectedNames = answerNamesByChoice[index];
+
+                  return (
+                  <div
+                    className={`answer-chart-column ${letters[index].toLowerCase()}`}
+                    key={letters[index]}
+                    tabIndex={0}
+                    aria-label={`${letters[index]} selected by ${selectedNames.length === 0 ? "no one" : selectedNames.join(", ")}`}
+                  >
                     <div className="answer-chart-top">
                       <strong>{count}</strong>
                     </div>
@@ -603,8 +674,21 @@ export default function HostPage() {
                       />
                     </div>
                     <div className="answer-chart-letter">{letters[index]}</div>
+                    <div className="answer-chart-tooltip" role="tooltip">
+                      <strong>{letters[index]} responses</strong>
+                      {selectedNames.length > 0 ? (
+                        <ul>
+                          {selectedNames.map(name => (
+                            <li key={name}>{name}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span>No responses yet</span>
+                      )}
+                    </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
               <div className="host-story-toast host-story-panel">{question.story}</div>
             </div>
@@ -671,6 +755,9 @@ export default function HostPage() {
                 <div className="rank-badge-huge">{i + 1}</div>
                 <div className="player-info-huge">
                   <span className="player-name-huge">{p.name}</span>
+                  {(playerStreaks[p.id] ?? 0) > 1 && (
+                    <span className="leaderboard-streak">🔥 {playerStreaks[p.id]} streak</span>
+                  )}
                 </div>
                 <div className="score-badge-wrap">
                   {p.score > (scoreBaselines[p.id] ?? p.score) && (

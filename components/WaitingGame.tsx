@@ -1,5 +1,6 @@
 "use client";
 
+import type { SyntheticEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 
 export default function WaitingGame({ onHighScore }: { onHighScore?: (score: number) => void }) {
@@ -7,6 +8,7 @@ export default function WaitingGame({ onHighScore }: { onHighScore?: (score: num
   const gameWrapRef = useRef<HTMLDivElement>(null);
   const onHighScoreRef = useRef(onHighScore);
   const bestScoreRef = useRef(0);
+  const triggerInputRef = useRef(() => {});
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
 
@@ -285,8 +287,18 @@ export default function WaitingGame({ onHighScore }: { onHighScore?: (score: num
       loop();
     };
 
+    let lastInputAt = 0;
+
     const handleInput = (e?: Event) => {
-      if (e) e.preventDefault();
+      if (e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      const now = performance.now();
+      if (now - lastInputAt < 120) return;
+      lastInputAt = now;
+
       switch (state) {
         case "GET_READY":
           state = "PLAYING";
@@ -307,6 +319,8 @@ export default function WaitingGame({ onHighScore }: { onHighScore?: (score: num
       }
     };
 
+    triggerInputRef.current = () => handleInput();
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === "Space" || e.code === "ArrowUp") {
         e.preventDefault();
@@ -315,31 +329,40 @@ export default function WaitingGame({ onHighScore }: { onHighScore?: (score: num
     };
 
     const inputTarget = gameWrap || canvas;
-    const supportsPointer = "PointerEvent" in window;
 
-    if (supportsPointer) {
-      inputTarget.addEventListener("pointerdown", handleInput);
-    } else {
-      inputTarget.addEventListener("touchstart", handleInput, { passive: false });
-      inputTarget.addEventListener("mousedown", handleInput);
-    }
+    inputTarget.addEventListener("touchstart", handleInput, { passive: false });
+    inputTarget.addEventListener("touchend", handleInput, { passive: false });
+    inputTarget.addEventListener("mousedown", handleInput);
+    inputTarget.addEventListener("click", handleInput);
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       if (animationId) cancelAnimationFrame(animationId);
-      if (supportsPointer) {
-        inputTarget.removeEventListener("pointerdown", handleInput);
-      } else {
-        inputTarget.removeEventListener("touchstart", handleInput);
-        inputTarget.removeEventListener("mousedown", handleInput);
-      }
+      triggerInputRef.current = () => {};
+      inputTarget.removeEventListener("touchstart", handleInput);
+      inputTarget.removeEventListener("touchend", handleInput);
+      inputTarget.removeEventListener("mousedown", handleInput);
+      inputTarget.removeEventListener("click", handleInput);
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
+  const triggerFromReact = (event: SyntheticEvent) => {
+    event.preventDefault();
+    event.stopPropagation();
+    triggerInputRef.current();
+  };
+
   return (
     <div
       ref={gameWrapRef}
+      role="button"
+      tabIndex={0}
+      aria-label="Play Flappy Bird"
+      onTouchStart={triggerFromReact}
+      onTouchEnd={triggerFromReact}
+      onMouseDown={triggerFromReact}
+      onClick={triggerFromReact}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -348,11 +371,12 @@ export default function WaitingGame({ onHighScore }: { onHighScore?: (score: num
         marginTop: '16px',
         width: '100%',
         touchAction: 'none',
+        WebkitTouchCallout: 'none',
         WebkitUserSelect: 'none',
         userSelect: 'none'
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', width: 'min(288px, 100%)', fontWeight: 800, color: '#a1a1aa', fontSize: '0.9rem' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', width: 'min(316px, 100%)', fontWeight: 800, color: '#a1a1aa', fontSize: '0.9rem' }}>
         <span>Score: <span style={{ color: '#fff' }}>{score}</span></span>
         <span>Best: <span style={{ color: '#fff' }}>{highScore}</span></span>
       </div>
@@ -365,7 +389,9 @@ export default function WaitingGame({ onHighScore }: { onHighScore?: (score: num
           boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
           cursor: 'pointer',
           touchAction: 'none',
-          width: 'min(288px, 100%)',
+          WebkitTouchCallout: 'none',
+          WebkitUserSelect: 'none',
+          width: 'min(316px, 100%)',
           height: 'auto',
           display: 'block'
         }}

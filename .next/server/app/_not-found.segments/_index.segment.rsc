@@ -1,6 +1,37 @@
 1:"$Sreact.fragment"
-2:I[39756,["/_next/static/chunks/0dbhjjzl8qfwv.js"],"default"]
-3:I[37457,["/_next/static/chunks/0dbhjjzl8qfwv.js"],"default"]
-:HL["/_next/static/chunks/05m7ysal_2un4.css","style"]
+3:I[39756,["/_next/static/chunks/0dbhjjzl8qfwv.js"],"default"]
+4:I[37457,["/_next/static/chunks/0dbhjjzl8qfwv.js"],"default"]
+:HL["/_next/static/chunks/0e0ilx_wo45e4.css","style"]
 :HL["https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap","style"]
-0:{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/05m7ysal_2un4.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/0dbhjjzl8qfwv.js","async":true}]],["$","html",null,{"lang":"en","children":[["$","head",null,{"children":[["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":"anonymous"}],["$","link",null,{"href":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap","rel":"stylesheet"}]]}],["$","body",null,{"children":["$","$L2",null,{"parallelRouterKey":"children","template":["$","$L3",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"sDUff0RfOMis9cKkBy_1o"}
+2:T5b6,
+              (() => {
+                const clean = (node) => {
+                  if (!node || !node.attributes) return;
+                  for (const attr of Array.from(node.attributes)) {
+                    if (attr.name.startsWith('__gcr')) node.removeAttribute(attr.name);
+                  }
+                };
+
+                clean(document.documentElement);
+                if (document.body) clean(document.body);
+                document.querySelectorAll('*').forEach(clean);
+
+                const observer = new MutationObserver((mutations) => {
+                  for (const mutation of mutations) {
+                    if (mutation.type === 'attributes' && mutation.attributeName?.startsWith('__gcr')) {
+                      mutation.target.removeAttribute(mutation.attributeName);
+                    }
+                    if (mutation.type === 'childList') {
+                      mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType !== 1) return;
+                        clean(node);
+                        node.querySelectorAll?.('*').forEach(clean);
+                      });
+                    }
+                  }
+                });
+
+                observer.observe(document.documentElement, { attributes: true, childList: true, subtree: true });
+                window.addEventListener('load', () => window.setTimeout(() => observer.disconnect(), 3000), { once: true });
+              })();
+            0:{"rsc":["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/chunks/0e0ilx_wo45e4.css","precedence":"next"}],["$","script","script-0",{"src":"/_next/static/chunks/0dbhjjzl8qfwv.js","async":true}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","script",null,{"dangerouslySetInnerHTML":{"__html":"$2"}}],["$","link",null,{"rel":"preconnect","href":"https://fonts.googleapis.com"}],["$","link",null,{"rel":"preconnect","href":"https://fonts.gstatic.com","crossOrigin":"anonymous"}],["$","link",null,{"href":"https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap","rel":"stylesheet"}]]}],["$","body",null,{"children":["$","$L3",null,{"parallelRouterKey":"children","template":["$","$L4",null,{}],"notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]]}]}]]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"jONau7GrtfZtoctfw_mQw"}

@@ -13,6 +13,7 @@ import {
 } from "@/utils/game-logic";
 import CircularTimer from "@/components/CircularTimer";
 import WaitingGame from "@/components/WaitingGame";
+import { Flame, Lightbulb } from "lucide-react";
 
 type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks";
 type Player = { id: string; name: string; score: number };
@@ -65,6 +66,9 @@ export default function PlayerPage() {
   const [answerPoints, setAnswerPoints] = useState(0);
   const [countdownLeft, setCountdownLeft] = useState(COUNTDOWN_SECONDS);
   const [suggestedGame, setSuggestedGame] = useState<GameState | null>(null);
+  const [streak, setStreak] = useState(0);
+  const [hintUsed, setHintUsed] = useState(false);
+  const [hiddenChoices, setHiddenChoices] = useState<number[]>([]);
 
   const faceEmojis = ["😎", "🤓", "🤠", "🥳", "👽", "🤖", "👻", "🦄", "🦁", "🐶", "🦊", "🦖", "🚀", "⭐", "🌟", "🏆", "🎓", "🎯", "🧠", "📚"];
 
@@ -86,6 +90,43 @@ export default function PlayerPage() {
   const playerAhead = playerRankIndex > 0 ? rankedGamePlayers[playerRankIndex - 1] : null;
   const pointsBehind = player && playerAhead ? Math.max(0, playerAhead.score - player.score) : 0;
 
+  async function selectGameByCode(nextCode: string) {
+    const normalizedCode = nextCode.trim().toUpperCase();
+    if (!normalizedCode) return false;
+
+    const { data, error } = await supabase
+      .from('games')
+      .select('*')
+      .eq('code', normalizedCode)
+      .single();
+
+    if (error || !data) return false;
+
+    setCode(normalizedCode);
+    setGame(data as GameState);
+    const { data: playersData } = await supabase
+      .from('players')
+      .select('id,name,score')
+      .eq('game_id', data.id);
+    setGamePlayers((playersData as Player[]) || []);
+    setMessage("");
+    setMessageKind("success");
+    setJoinStep("name");
+    return true;
+  }
+
+  useEffect(() => {
+    const codeFromUrl = new URLSearchParams(window.location.search).get("code");
+    if (!codeFromUrl) return;
+
+    selectGameByCode(codeFromUrl).then((foundGame) => {
+      if (foundGame) return;
+      setCode(codeFromUrl.trim().toUpperCase());
+      setMessage("Class code not found. Ask the host to refresh the QR code.");
+      setMessageKind("error");
+    });
+  }, []);
+
   useEffect(() => {
     async function loadSuggestedGame() {
       const { data } = await supabase
@@ -99,6 +140,17 @@ export default function PlayerPage() {
     }
 
     loadSuggestedGame();
+
+    const channel = supabase
+      .channel('latest-player-game')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'games' }, (payload: any) => {
+        setSuggestedGame(payload.new as GameState);
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   // Sync timer
@@ -140,6 +192,7 @@ export default function PlayerPage() {
           ) {
             setAnswerChoice(null);
             setAnswerPoints(0);
+            setHiddenChoices([]);
           }
 
           return nextGame;
@@ -201,11 +254,9 @@ export default function PlayerPage() {
     });
 
     // Broadcast
-    supabase.channel(`flappy-${game.id}`).send({
-      type: 'broadcast',
-      event: 'flappy_score',
-      payload: { id: player.id, name: displayName, score }
-    });
+    supabase
+      .channel(`flappy-${game.id}`)
+      .httpSend('flappy_score', { id: player.id, name: displayName, score });
   }, [game?.id, player]);
 
   async function handleCodeNext() {
@@ -216,36 +267,17 @@ export default function PlayerPage() {
     }
     setMessageKind("success");
     setMessage("Checking code...");
-    const { data, error } = await supabase.from('games').select('*').eq('code', code.trim().toUpperCase()).single();
+    const foundGame = await selectGameByCode(code);
 
-    if (error || !data) {
+    if (!foundGame) {
       setMessage("Class code not found.");
       setMessageKind("error");
-      return;
     }
-
-    setGame(data as GameState);
-    const { data: playersData } = await supabase
-      .from('players')
-      .select('id,name,score')
-      .eq('game_id', data.id);
-    setGamePlayers((playersData as Player[]) || []);
-    setMessage("");
-    setJoinStep("name");
   }
 
   async function useSuggestedGame() {
     if (!suggestedGame) return;
-    setCode(suggestedGame.code);
-    setGame(suggestedGame);
-    const { data: playersData } = await supabase
-      .from('players')
-      .select('id,name,score')
-      .eq('game_id', suggestedGame.id);
-    setGamePlayers((playersData as Player[]) || []);
-    setMessage("");
-    setMessageKind("success");
-    setJoinStep("name");
+    await selectGameByCode(suggestedGame.code);
   }
 
   async function handleNameSubmit() {
@@ -293,13 +325,29 @@ export default function PlayerPage() {
       const newPlayer = { id: playerId, name: name.trim().slice(0, 18), score: 0 };
       setPlayer(newPlayer);
       setGamePlayers(prev => [...prev, newPlayer]);
+      setStreak(0);
+      setHintUsed(false);
     } finally {
       setJoining(false);
     }
   }
 
+  function useHint() {
+    if (!question || hintUsed || answerChoice !== null || game?.revealed) return;
+
+    const wrongChoices = question.answers
+      .map((_, index) => index)
+      .filter(index => index !== question.correct && !hiddenChoices.includes(index));
+    const hiddenChoice = wrongChoices[(game?.current_question ?? 0) % wrongChoices.length];
+    if (hiddenChoice !== undefined) {
+      setHiddenChoices([hiddenChoice]);
+      setHintUsed(true);
+    }
+  }
+
   async function submitAnswer(choice: number) {
     if (!player || !game || answerChoice !== null || game.revealed) return;
+    if (hiddenChoices.includes(choice)) return;
     setSendingAnswer(choice);
 
     try {
@@ -317,6 +365,7 @@ export default function PlayerPage() {
       if (!error) {
         setAnswerChoice(choice);
         setAnswerPoints(earnedPoints);
+        setStreak(prev => (isCorrect ? prev + 1 : 0));
 
         if (earnedPoints > 0) {
           const nextScore = player.score + earnedPoints;
@@ -343,11 +392,9 @@ export default function PlayerPage() {
       // If they are on the leaderboard, update their entry for everyone
       const myScore = flappyScores.find(s => s.id === player.id);
       if (myScore) {
-        supabase.channel(`flappy-${game.id}`).send({
-          type: 'broadcast',
-          event: 'flappy_score',
-          payload: { id: player.id, name: updatedName, score: myScore.score }
-        });
+        supabase
+          .channel(`flappy-${game.id}`)
+          .httpSend('flappy_score', { id: player.id, name: updatedName, score: myScore.score });
       }
     }
   }
@@ -361,6 +408,9 @@ export default function PlayerPage() {
     setJoinStep("code");
     setMessage("");
     setMessageKind("info");
+    setStreak(0);
+    setHintUsed(false);
+    setHiddenChoices([]);
   }
 
   const joined = Boolean(player && game);
@@ -410,6 +460,7 @@ export default function PlayerPage() {
                       autoCorrect="off"
                       autoComplete="off"
                       autoFocus
+                      suppressHydrationWarning
                     />
                   </div>
                   <button
@@ -436,6 +487,7 @@ export default function PlayerPage() {
                       placeholder="Enter your name"
                       autoComplete="name"
                       autoFocus
+                      suppressHydrationWarning
                     />
                   </div>
                   <button
@@ -478,7 +530,7 @@ export default function PlayerPage() {
           <div className="lobby-grid" style={{ marginTop: '60px' }}>
 
             {/* Left: Customization */}
-            <div className="lobby-panel">
+            <div className="lobby-panel profile-panel">
               <h3>Customize Profile</h3>
               <p className="text-muted text-sm">This shows on the leaderboard!</p>
 
@@ -488,6 +540,7 @@ export default function PlayerPage() {
                     key={emoji}
                     className={`emoji-btn ${avatarEmoji === emoji ? 'selected' : ''}`}
                     onClick={() => updateEmoji(emoji)}
+                    aria-label={`Use ${emoji} as your avatar`}
                   >
                     {emoji}
                   </button>
@@ -526,7 +579,7 @@ export default function PlayerPage() {
               <WaitingGame onHighScore={handleFlappyHighScore} />
 
               {/* Mini Flappy Leaderboard */}
-              <div style={{ marginTop: '12px', width: '288px', background: 'rgba(0,0,0,0.2)', padding: '12px', borderRadius: '12px', border: '1px solid var(--border)' }}>
+              <div className="flappy-leaderboard">
                 <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '8px' }}>🏆 Flappy Leaderboard</div>
                 {flappyScores.length === 0 ? (
                   <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center', padding: '16px 0' }}>
@@ -643,7 +696,7 @@ export default function PlayerPage() {
 
       {/* ── QUESTION PHASE (player answers) ── */}
       {joined && game?.phase === "question" && question && (
-        <section className="player-full-screen">
+        <section className={`player-full-screen ${answerChoice !== null && !game.revealed ? "locked-waiting-screen" : ""}`}>
           <div className="player-answer-topbar">
             <div className="player-pill">
               <span className="player-pill-label">Player</span>
@@ -656,17 +709,38 @@ export default function PlayerPage() {
             </div>
           </div>
 
+          {game.revealed && answerResult === "correct" && streak > 1 && (
+            <div className="player-power-status">
+              <div className="streak-pill">
+                <Flame size={18} />
+                <span>{streak} streak</span>
+              </div>
+            </div>
+          )}
+
           {!(answerChoice !== null && !game.revealed) && (
             <div className="player-center-copy">
-              <h2>
-                {game.revealed
-                  ? answerResult === "timeout"
+              {!game.revealed ? (
+                <div className="answer-prompt-row">
+                  <h2>Tap Your Answer</h2>
+                  <button
+                    className="hint-button"
+                    disabled={hintUsed || hiddenChoices.length > 0}
+                    onClick={useHint}
+                  >
+                    <Lightbulb size={20} />
+                    <span>{hintUsed ? "Hint Used" : "Hint"}</span>
+                  </button>
+                </div>
+              ) : (
+                <h2>
+                  {answerResult === "timeout"
                     ? "Time's Up"
                     : answerResult === "correct"
                     ? "Correct"
-                    : "Not Quite"
-                  : "Tap Your Answer"}
-              </h2>
+                    : "Not Quite"}
+                </h2>
+              )}
             </div>
           )}
 
@@ -674,18 +748,18 @@ export default function PlayerPage() {
             <div className="player-answer-grid-full">
               {question.answers.map((option, index) => (
                 <button
-                  className={`player-answer-tile ${letters[index].toLowerCase()}`}
-                  disabled={sendingAnswer !== null}
+                  className={`player-answer-tile ${letters[index].toLowerCase()} ${hiddenChoices.includes(index) ? "hidden-by-hint" : ""}`}
+                  disabled={sendingAnswer !== null || hiddenChoices.includes(index)}
                   key={option}
                   onClick={() => submitAnswer(index)}
                   aria-label={`Answer ${letters[index]}`}
                 >
-                  <span className="player-answer-letter">{letters[index]}</span>
+                  <span className="player-answer-letter">{hiddenChoices.includes(index) ? "?" : letters[index]}</span>
                 </button>
               ))}
             </div>
           ) : (
-            <div className={`player-locked-panel ${answerResult ?? ""}`}>
+            <div className={`player-locked-panel ${game.revealed ? answerResult ?? "" : "waiting"}`}>
               <div className="player-locked-icon">
                 {game.revealed ? (answerResult === "timeout" ? "⏱" : answerResult === "correct" ? "✓" : "×") : "✓"}
               </div>
@@ -713,8 +787,8 @@ export default function PlayerPage() {
       {joined && game?.phase === "sle" && (
         <section className="player-full-screen player-message-screen">
           <div className="badge accent center-x">SLE Moment</div>
-          <h2>Look at the Projector</h2>
-          <p>The host is presenting a Student Learning Expectation.</p>
+          <h2>Look at the Screen</h2>
+          <p>Aadit is presenting a Student Learning Expectation.</p>
         </section>
       )}
 
@@ -725,7 +799,11 @@ export default function PlayerPage() {
           {playerRank && playerRank <= 5 ? (
             <>
               <h2>You're #{playerRank}</h2>
-              <p>{player?.score ?? 0} points</p>
+              <div className="player-score-box">
+                <span>Your Points</span>
+                <strong>{(player?.score ?? 0).toLocaleString()}</strong>
+              </div>
+              {streak > 0 && <div className="player-streak-box">🔥 {streak} correct in a row</div>}
             </>
           ) : (
             <>
@@ -735,6 +813,11 @@ export default function PlayerPage() {
                   ? `${pointsBehind.toLocaleString()} points behind ${plainPlayerName(playerAhead.name)}`
                   : `${player?.score ?? 0} points`}
               </p>
+              <div className="player-score-box">
+                <span>Your Points</span>
+                <strong>{(player?.score ?? 0).toLocaleString()}</strong>
+              </div>
+              {streak > 0 && <div className="player-streak-box">🔥 {streak} correct in a row</div>}
             </>
           )}
         </section>
