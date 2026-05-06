@@ -1083,6 +1083,158 @@ h3 { font-size: clamp(1.1rem, 2.5vw, 1.4rem); font-weight: 700; }
 
 .rank-1 .score-badge-huge { color: #facc15; }
 
+/* ── Final Photo Gallery ── */
+.photo-gallery-full {
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(8px, 1.4vh, 14px);
+  padding: clamp(10px, 1.8vh, 18px) clamp(18px, 3vw, 42px) clamp(12px, 2vh, 20px);
+  text-align: center;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 50% 16%, rgba(99,102,241,0.22), transparent 32%),
+    radial-gradient(circle at 16% 78%, rgba(20,184,166,0.14), transparent 30%),
+    radial-gradient(circle at 84% 78%, rgba(250,204,21,0.12), transparent 30%),
+    #080910;
+}
+
+.photo-gallery-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.photo-gallery-title {
+  color: white;
+  font-size: clamp(2rem, 4.2vw, 3.65rem);
+  font-weight: 1000;
+  line-height: 0.9;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 0 22px 70px rgba(0,0,0,0.38);
+}
+
+.photo-gallery-grid {
+  width: min(1220px, 100%);
+  height: min(70vh, calc(100dvh - 180px));
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 1.1vw, 14px);
+  align-content: stretch;
+}
+
+.memory-photo-card {
+  position: relative;
+  min-height: 0;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.13);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 20px 55px rgba(0,0,0,0.28);
+}
+
+.memory-photo-card img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 260ms ease, filter 260ms ease;
+}
+
+.memory-photo-card figcaption {
+  position: absolute;
+  inset: auto 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 42px 16px 14px;
+  background: linear-gradient(180deg, transparent, rgba(0,0,0,0.86));
+  color: white;
+  text-align: left;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.memory-photo-card strong {
+  font-size: clamp(0.95rem, 1.7vw, 1.18rem);
+  font-weight: 950;
+  line-height: 1;
+}
+
+.memory-photo-card span {
+  color: rgba(255,255,255,0.76);
+  font-size: clamp(0.75rem, 1.2vw, 0.9rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.memory-photo-card:hover img,
+.memory-photo-card:focus-within img {
+  transform: scale(1.05);
+  filter: brightness(0.76);
+}
+
+.memory-photo-card:hover figcaption,
+.memory-photo-card:focus-within figcaption {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.photo-gallery-actions {
+  width: auto;
+  border-top: 0;
+  padding-top: 0;
+  flex: 0 0 auto;
+}
+
+.photo-gallery-actions .btn-xl {
+  min-height: 54px;
+  padding: 13px 28px;
+  font-size: 0.98rem;
+  border-radius: 14px;
+}
+
+.player-photos-screen {
+  background:
+    radial-gradient(circle at 50% 20%, rgba(99,102,241,0.22), transparent 34%),
+    radial-gradient(circle at 82% 78%, rgba(250,204,21,0.12), transparent 30%),
+    var(--bg);
+}
+
+@media (max-width: 860px), (max-height: 760px) {
+  .photo-gallery-full {
+    padding: 10px 14px 12px;
+  }
+
+  .photo-gallery-title {
+    font-size: clamp(1.65rem, 4vw, 2.7rem);
+  }
+
+  .photo-gallery-grid {
+    height: min(68vh, calc(100dvh - 150px));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .memory-photo-card {
+    border-radius: 14px;
+  }
+
+  .memory-photo-card figcaption {
+    opacity: 1;
+    transform: none;
+    padding: 34px 12px 10px;
+  }
+}
+
 /* ── Final Results Podium ── */
 .results-full {
   align-items: center;

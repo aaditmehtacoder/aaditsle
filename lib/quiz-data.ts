@@ -146,7 +146,7 @@ export const sleRounds: SleRound[] = [
         story: "When someone thinks of Healthy Individual, they think of someone who plays lots of sports. But something as simple as eating healthy and making the space around you positive is just as important."
       }),
       question({
-        text: "What two sports did I play at QoFa?",
+        text: "What two sports did I play at Qofa?",
         answers: [
           { text: "Basketball and Soccer", correct: false },
           { text: "Soccer and Flag Football", correct: false },

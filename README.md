@@ -1,5 +1,5 @@
 
-A modern Kahoot-style quiz game for Aadit's 8th grade graduation SLE project at QoFa.
+A modern Kahoot-style quiz game for Aadit's 8th grade graduation SLE project at Qofa.
 
 ## How to Run
 

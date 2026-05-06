@@ -106,6 +106,8 @@ self.__SERVER_FILES_MANIFEST={
     },
     "outputFileTracingRoot": "/Users/aaditmehta/Desktop/sle",
     "allowedDevOrigins": [
+      "192.168.1.241",
+      "http://192.168.1.241:3000",
       "192.168.1.250",
       "http://192.168.1.250:3000"
     ],

@@ -9,7 +9,7 @@ import { createClient } from "@/utils/supabase/client";
 import { calculateQuestionPoints, COUNTDOWN_SECONDS, countdownLeftFor, generateClassCode, maxPointsFor, QUESTION_SECONDS, timeLeftFor } from "@/utils/game-logic";
 import { Plus, Trash2 } from "lucide-react";
 
-type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks" | "results";
+type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks" | "photos" | "results";
 type Player = { id: string; name: string; score: number; joinedAt: number };
 type Answer = { id: string; player_id: string; question_index: number; choice: number; correct: boolean };
 type GameState = {
@@ -30,6 +30,54 @@ const botNames = [
   "Zoe", "Mason", "Nina", "Lucas", "Ella", "Kai", "Ruby", "Miles", "Ivy", "Theo",
   "Grace", "Liam", "Maya", "Jack", "Chloe", "Henry", "Aria", "Logan", "Nora", "Ezra",
   "Layla", "Finn", "Stella", "Caleb", "Jade"
+];
+
+const finalPhotos = [
+  {
+    src: "/assets/firstdayof8thwsister.png",
+    title: "First Day of 8th Grade",
+    description: "Sister drove me to school - first day of 8th grade."
+  },
+  {
+    src: "/assets/6thgrademe.png",
+    title: "6th Grade",
+    description: "A look back at the start of middle school."
+  },
+  {
+    src: "/assets/6thgradepicturewdad.png",
+    title: "6th Grade With Dad",
+    description: "My dad was with me."
+  },
+  {
+    src: "/assets/sle6th.png",
+    title: "6th Grade SLE",
+    description: "Active Learner SLE."
+  },
+  {
+    src: "/assets/sle8th.png",
+    title: "8th Grade SLE",
+    description: "Self Confident & Responsible SLE."
+  },
+  {
+    src: "/assets/basketballteam.jpg",
+    title: "Basketball Team",
+    description: "Healthy individual."
+  },
+  {
+    src: "/assets/basketball.png",
+    title: "Flag Football Team",
+    description: "Flag football team."
+  },
+  {
+    src: "/assets/yearbook.jpg",
+    title: "8th Grade Yearbook Team",
+    description: "Austin, Hannah, Julia, Annie, and me."
+  },
+  {
+    src: "/assets/loquat1.png",
+    title: "Loquat Tree",
+    description: "Continued, my act of giving back."
+  }
 ];
 
 function splitPlayerName(playerName = "") {
@@ -345,6 +393,8 @@ export default function HostPage() {
       updates.question_started_at = Date.now();
       setScoreBaselines(baselinesFrom(players));
     } else if (action === "next" && game.phase === 'thanks') {
+      updates.phase = 'photos';
+    } else if (action === "next" && game.phase === 'photos') {
       updates.phase = 'results';
     } else if (action === "next" && game.phase === 'results') {
       updates.phase = 'lobby';
@@ -598,7 +648,7 @@ export default function HostPage() {
       {game.phase === "welcome" && (
         <section className="host-full-screen welcome-full">
           <div className="welcome-card">
-            <div className="badge accent center-x">QoFa 8th Grade SLE Project</div>
+            <div className="badge accent center-x">Qofa 8th Grade SLE Project</div>
             <h1>Welcome</h1>
             <p>How Well Do You Know Aadit?</p>
             <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
@@ -804,9 +854,37 @@ export default function HostPage() {
           <div className="welcome-card">
             <div className="badge green center-x">Presentation Complete</div>
             <h1>Thank You</h1>
-            <p>Thank you for playing and for being part of my QoFa journey.</p>
+            <p>Thank you for playing and for being part of my Qofa journey.</p>
             <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
               See Results
+            </button>
+          </div>
+        </section>
+      )}
+
+      {/* ── FINAL PHOTO GALLERY ── */}
+      {game.phase === "photos" && (
+        <section className="host-full-screen photo-gallery-full">
+          <div className="photo-gallery-header">
+            <div className="badge accent center-x">Qofa Memories</div>
+            <h1 className="photo-gallery-title">Before the Results</h1>
+          </div>
+
+          <div className="photo-gallery-grid">
+            {finalPhotos.map((photo) => (
+              <figure className="memory-photo-card" key={photo.src} title={`${photo.title}: ${photo.description}`}>
+                <img src={photo.src} alt={photo.title} />
+                <figcaption>
+                  <strong>{photo.title}</strong>
+                  <span>{photo.description}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+
+          <div className="host-bottom-bar centered photo-gallery-actions">
+            <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
+              Continue to Results →
             </button>
           </div>
         </section>

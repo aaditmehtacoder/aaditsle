@@ -15,7 +15,7 @@ import CircularTimer from "@/components/CircularTimer";
 import WaitingGame from "@/components/WaitingGame";
 import { Flame, Lightbulb } from "lucide-react";
 
-type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks" | "results";
+type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks" | "photos" | "results";
 type Player = { id: string; name: string; score: number };
 type GameState = {
   id: string;
@@ -829,6 +829,15 @@ export default function PlayerPage() {
           <div className="badge green center-x">Thank You</div>
           <h2>Thanks for Playing</h2>
           <p>Great job, {plainPlayerName(player?.name)}.</p>
+        </section>
+      )}
+
+      {/* ── PHOTO GALLERY ── */}
+      {joined && game?.phase === "photos" && (
+        <section className="player-full-screen player-message-screen player-photos-screen">
+          <div className="badge accent center-x">Qofa Memories</div>
+          <h2>Look at the Screen</h2>
+          <p>Aadit is sharing a few photos before the final results.</p>
         </section>
       )}
 

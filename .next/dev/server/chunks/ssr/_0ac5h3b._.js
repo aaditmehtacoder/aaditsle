@@ -74,7 +74,7 @@ const sleRounds = [
     },
     {
         title: "Active Learner",
-        definition: "Being an Active Learner means I don't just sit in class waiting for the bell to ring. I ask questions, dive into projects, and even when I run into a bug in my code, I don't give up until I figure it out.",
+        definition: "Being an Active Learner means I don't just sit in class waiting for the bell to ring. I am not afraid to ask questions, even if they sound “dumb”. I try to contribute my part in group projects, and I try to not give up until I have figured it out, living by the “never give up” motto.",
         claim: "I have achieved this SLE by always giving my best effort on my assignments and showing enthusiasm in all subjects, even when the material gets challenging, the day gets pretty long, or I had a rough night.",
         evidence: "At Qofa, I have shown the Active Learner SLE, but it’s more than just finishing my homework. It means walking into class even on a hard day and choosing to actually be there not just physically, but mentally. There were plenty of mornings from my two years where I was tired and it would've been easy to just zone out, but I tried to stay engaged, and I have to admit, I am not perfect, but you can’t catch me sleeping in class, never.",
         questions: [
@@ -207,7 +207,7 @@ const sleRounds = [
                 story: "When someone thinks of Healthy Individual, they think of someone who plays lots of sports. But something as simple as eating healthy and making the space around you positive is just as important."
             }),
             question({
-                text: "What two sports did I play at QoFa?",
+                text: "What two sports did I play at Qofa?",
                 answers: [
                     {
                         text: "Basketball and Soccer",
@@ -2400,6 +2400,37 @@ function PlayerPage() {
                 lineNumber: 828,
                 columnNumber: 9
             }, this),
+            joined && game?.phase === "photos" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                className: "player-full-screen player-message-screen player-photos-screen",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "badge accent center-x",
+                        children: "Qofa Memories"
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 838,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        children: "Look at the Screen"
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 839,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: "Aadit is sharing a few photos before the final results."
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 840,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/page.tsx",
+                lineNumber: 837,
+                columnNumber: 9
+            }, this),
             joined && game?.phase === "results" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
                 className: "player-full-screen player-message-screen player-results-screen",
                 children: [
@@ -2408,14 +2439,14 @@ function PlayerPage() {
                         children: "Final Results"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 838,
+                        lineNumber: 847,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                         children: playerRank ? `You placed ${playerRank}${rankSuffix(playerRank)}` : "Results are up"
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 839,
+                        lineNumber: 848,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2425,33 +2456,33 @@ function PlayerPage() {
                                 children: "Your Points"
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 845,
+                                lineNumber: 854,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
                                 children: (player?.score ?? 0).toLocaleString()
                             }, void 0, false, {
                                 fileName: "[project]/app/page.tsx",
-                                lineNumber: 846,
+                                lineNumber: 855,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 844,
+                        lineNumber: 853,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                         children: "Look at the screen for the top 3 podium."
                     }, void 0, false, {
                         fileName: "[project]/app/page.tsx",
-                        lineNumber: 848,
+                        lineNumber: 857,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
-                lineNumber: 837,
+                lineNumber: 846,
                 columnNumber: 9
             }, this)
         ]
