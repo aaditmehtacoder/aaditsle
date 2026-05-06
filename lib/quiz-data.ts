@@ -73,7 +73,7 @@ export const sleRounds: SleRound[] = [
   },
   {
     title: "Active Learner",
-    definition: "Being an Active Learner means I don't just sit in class waiting for the bell to ring. I ask questions, dive into projects, and even when I run into a bug in my code, I don't give up until I figure it out.",
+    definition: "Being an Active Learner means I don't just sit in class waiting for the bell to ring. I am not afraid to ask questions, even if they sound “dumb”. I try to contribute my part in group projects, and I try to not give up until I have figured it out, living by the “never give up” motto.",
     claim: "I have achieved this SLE by always giving my best effort on my assignments and showing enthusiasm in all subjects, even when the material gets challenging, the day gets pretty long, or I had a rough night.",
     evidence: "At Qofa, I have shown the Active Learner SLE, but it’s more than just finishing my homework. It means walking into class even on a hard day and choosing to actually be there not just physically, but mentally. There were plenty of mornings from my two years where I was tired and it would've been easy to just zone out, but I tried to stay engaged, and I have to admit, I am not perfect, but you can’t catch me sleeping in class, never.",
     questions: [
