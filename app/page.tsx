@@ -15,7 +15,7 @@ import CircularTimer from "@/components/CircularTimer";
 import WaitingGame from "@/components/WaitingGame";
 import { Flame, Lightbulb } from "lucide-react";
 
-type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks";
+type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks" | "results";
 type Player = { id: string; name: string; score: number };
 type GameState = {
   id: string;
@@ -83,7 +83,7 @@ export default function PlayerPage() {
         : "incorrect"
       : undefined;
   const finalLeaderboard =
-    Boolean(game && question && game.current_question >= game.question_count - 1 && game.pending_sle_index === question.roundIndex);
+    Boolean(game && game.current_question >= game.question_count - 1);
   const rankedGamePlayers = [...gamePlayers].sort((a, b) => b.score - a.score);
   const playerRankIndex = player ? rankedGamePlayers.findIndex((entry) => entry.id === player.id) : -1;
   const playerRank = playerRankIndex >= 0 ? playerRankIndex + 1 : null;
@@ -428,10 +428,10 @@ export default function PlayerPage() {
             </div>
 
             <div className="stack stack-sm text-center">
-              <h1>{joinStep === "code" ? "Join Quiz" : "What's Your Name?"}</h1>
+              <h1>{joinStep === "code" ? "Join Game" : "What's Your Name?"}</h1>
               <p className="subtitle">
                 {joinStep === "code"
-                  ? "Enter the class code shown on the projector."
+                  ? "Enter the class code shown by Aadit on the screen."
                   : "Please enter your real name when you join."}
               </p>
             </div>
@@ -455,7 +455,7 @@ export default function PlayerPage() {
                       onChange={(e) => setCode(e.target.value.toUpperCase())}
                       onKeyDown={(e) => e.key === "Enter" && handleCodeNext()}
                       maxLength={8}
-                      placeholder="e.g. AADIT"
+                      placeholder="Game Code"
                       autoCapitalize="characters"
                       autoCorrect="off"
                       autoComplete="off"
@@ -829,6 +829,23 @@ export default function PlayerPage() {
           <div className="badge green center-x">Thank You</div>
           <h2>Thanks for Playing</h2>
           <p>Great job, {plainPlayerName(player?.name)}.</p>
+        </section>
+      )}
+
+      {/* ── FINAL RESULTS ── */}
+      {joined && game?.phase === "results" && (
+        <section className="player-full-screen player-message-screen player-results-screen">
+          <div className="badge green center-x">Final Results</div>
+          <h2>
+            {playerRank
+              ? `You placed ${playerRank}${rankSuffix(playerRank)}`
+              : "Results are up"}
+          </h2>
+          <div className="player-score-box">
+            <span>Your Points</span>
+            <strong>{(player?.score ?? 0).toLocaleString()}</strong>
+          </div>
+          <p>Look at the screen for the top 3 podium.</p>
         </section>
       )}
     </main>

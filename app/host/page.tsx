@@ -7,9 +7,9 @@ import CircularTimer from "@/components/CircularTimer";
 import AnimatedScore from "@/components/AnimatedScore";
 import { createClient } from "@/utils/supabase/client";
 import { calculateQuestionPoints, COUNTDOWN_SECONDS, countdownLeftFor, generateClassCode, maxPointsFor, QUESTION_SECONDS, timeLeftFor } from "@/utils/game-logic";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 
-type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks";
+type Phase = "lobby" | "welcome" | "countdown" | "question" | "sle" | "leaderboard" | "thanks" | "results";
 type Player = { id: string; name: string; score: number; joinedAt: number };
 type Answer = { id: string; player_id: string; question_index: number; choice: number; correct: boolean };
 type GameState = {
@@ -32,6 +32,13 @@ const botNames = [
   "Layla", "Finn", "Stella", "Caleb", "Jade"
 ];
 
+function splitPlayerName(playerName = "") {
+  const emojiMatch = playerName.match(/^(\p{Emoji_Presentation})/u);
+  const emoji = emojiMatch ? emojiMatch[1] : "👤";
+  const name = emojiMatch ? playerName.slice(emojiMatch[1].length).trim() : playerName;
+  return { emoji, name: name || playerName };
+}
+
 export default function HostPage() {
   const [game, setGame] = useState<GameState | null>(null);
   const [players, setPlayers] = useState<Player[]>([]);
@@ -45,6 +52,7 @@ export default function HostPage() {
   const [countdownLeft, setCountdownLeft] = useState(COUNTDOWN_SECONDS);
   const [scoreBaselines, setScoreBaselines] = useState<Record<string, number>>({});
   const [testBotsEnabled, setTestBotsEnabled] = useState(false);
+  const [podiumStep, setPodiumStep] = useState(0);
   const botAnswerKeys = useRef(new Set<string>());
 
   const supabase = useMemo(() => createClient(), []);
@@ -107,6 +115,25 @@ export default function HostPage() {
     setJoinUrl(window.location.origin);
     initializeGame();
   }, []);
+
+  useEffect(() => {
+    if (game?.phase !== "results") {
+      setPodiumStep(0);
+      return;
+    }
+
+    setPodiumStep(0);
+    const timeouts = [
+      window.setTimeout(() => setPodiumStep(1), 600),
+      window.setTimeout(() => setPodiumStep(2), 1900),
+      window.setTimeout(() => {
+        setPodiumStep(3);
+        launchConfetti();
+      }, 3200)
+    ];
+
+    return () => timeouts.forEach(timeout => window.clearTimeout(timeout));
+  }, [game?.phase]);
 
   async function initializeGame() {
     const code = generateClassCode();
@@ -310,29 +337,40 @@ export default function HostPage() {
       updates.revealed = true;
     }
 
-    if (action === "next") {
+    if (action === "next" && game.phase === 'welcome') {
+      updates.phase = 'sle';
+      updates.current_question = 0;
+      updates.revealed = false;
+      updates.pending_sle_index = 0;
+      updates.question_started_at = Date.now();
+      setScoreBaselines(baselinesFrom(players));
+    } else if (action === "next" && game.phase === 'thanks') {
+      updates.phase = 'results';
+    } else if (action === "next" && game.phase === 'results') {
+      updates.phase = 'lobby';
+      updates.current_question = 0;
+      updates.revealed = false;
+      updates.pending_sle_index = null;
+      setAnswers([]);
+    } else if (action === "next") {
       const q = questions[game.current_question];
       const atRoundEnd = q.questionIndex === sleRounds[q.roundIndex].questions.length - 1;
       const atFinalQuestion = game.current_question >= questions.length - 1;
 
       if (game.phase === 'sle') {
-        if (atFinalQuestion) {
-          updates.phase = 'leaderboard';
-          launchConfetti();
-        } else {
-          updates.phase = 'countdown';
-          updates.current_question = game.current_question + 1;
-          updates.revealed = false;
-          updates.pending_sle_index = null;
-          updates.question_started_at = Date.now();
-          setScoreBaselines(baselinesFrom(players));
-        }
+        updates.phase = 'countdown';
+        updates.revealed = false;
+        updates.pending_sle_index = null;
+        updates.question_started_at = Date.now();
+        setScoreBaselines(baselinesFrom(players));
       } else if (game.phase === 'leaderboard') {
-        if (atFinalQuestion && game.pending_sle_index === q.roundIndex) {
+        if (atFinalQuestion) {
           updates.phase = 'thanks';
         } else if (atRoundEnd) {
           updates.phase = 'sle';
-          updates.pending_sle_index = q.roundIndex;
+          updates.current_question = game.current_question + 1;
+          updates.revealed = false;
+          updates.pending_sle_index = q.roundIndex + 1;
         } else {
           updates.phase = 'countdown';
           updates.current_question = game.current_question + 1;
@@ -344,23 +382,6 @@ export default function HostPage() {
       } else {
         updates.phase = 'leaderboard';
       }
-    }
-
-    if (action === "next" && game.phase === 'welcome') {
-      updates.phase = 'countdown';
-      updates.current_question = 0;
-      updates.revealed = false;
-      updates.pending_sle_index = null;
-      updates.question_started_at = Date.now();
-      setScoreBaselines(baselinesFrom(players));
-    }
-
-    if (action === "next" && game.phase === 'thanks') {
-      updates.phase = 'lobby';
-      updates.current_question = 0;
-      updates.revealed = false;
-      updates.pending_sle_index = null;
-      setAnswers([]);
     }
 
     const { data } = await supabase.from('games').update(updates as any).eq('id', game.id).select().single();
@@ -481,7 +502,7 @@ export default function HostPage() {
       {game.phase === "lobby" && (
         <section className="card host-lobby">
           <div className="topbar">
-            <div className="badge">Host Control Panel</div>
+            <div className="badge">Game Control Panel</div>
             <button className="btn btn-ghost" onClick={() => hostAction("reset")}>
               Reset
             </button>
@@ -490,7 +511,7 @@ export default function HostPage() {
           <div className="lobby-header">
             <h1>How Well Do You Know Aadit?</h1>
             <p className="subtitle">
-              Students join on their devices. Show this screen on the projector.
+              Use the code on screen to join the game. Thank you for playing!
             </p>
           </div>
 
@@ -528,10 +549,7 @@ export default function HostPage() {
           {players.length > 0 && (
             <div className="player-cards-grid">
               {players.map((p) => {
-                // Extract emoji and base name
-                const emojiMatch = p.name.match(/^(\p{Emoji_Presentation})/u);
-                const emoji = emojiMatch ? emojiMatch[1] : '👤';
-                const baseName = emojiMatch ? p.name.slice(emojiMatch[1].length).trim() : p.name;
+                const { emoji, name: baseName } = splitPlayerName(p.name);
                 return (
                   <div className="player-card" key={p.id} onClick={() => kickPlayer(p.id, p.name)}>
                     <div className="player-card-emoji">{emoji}</div>
@@ -547,12 +565,20 @@ export default function HostPage() {
           )}
 
           <div className="button-row">
+            <button
+              className="btn btn-primary btn-lg"
+              onClick={() => hostAction("start")}
+              disabled={players.length === 0}
+            >
+              Start Round
+            </button>
             <div className="host-test-controls">
               <button
                 className={`btn btn-ghost btn-lg test-mode-toggle ${testBotsEnabled ? "active" : ""}`}
                 onClick={toggleTestBots}
+                aria-expanded={testBotsEnabled}
               >
-                {testBotsEnabled ? "Test Bots: On" : "Test Bots: Off"}
+                <Plus size={30} strokeWidth={2.6} aria-hidden="true" />
               </button>
               {testBotsEnabled && (
                 <button
@@ -564,13 +590,6 @@ export default function HostPage() {
                 </button>
               )}
             </div>
-            <button
-              className="btn btn-primary btn-lg"
-              onClick={() => hostAction("start")}
-              disabled={players.length === 0}
-            >
-              Start Round
-            </button>
           </div>
         </section>
       )}
@@ -745,7 +764,7 @@ export default function HostPage() {
       {game.phase === "leaderboard" && (
         <section className="host-full-screen leaderboard-full">
           <div className="leaderboard-header">
-            <div className="badge green">{game.current_question >= game.question_count - 1 && game.pending_sle_index === question?.roundIndex ? "Final Results" : "After This Question"}</div>
+            <div className="badge green">{game.current_question >= game.question_count - 1 ? "Final Results" : "After This Question"}</div>
             <h1 className="leaderboard-main-title">Top 5 Scores</h1>
           </div>
 
@@ -773,7 +792,7 @@ export default function HostPage() {
 
           <div className="host-bottom-bar centered">
             <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
-              {game.current_question >= game.question_count - 1 && game.pending_sle_index === question?.roundIndex ? "Back to Lobby" : "Continue →"}
+              {game.current_question >= game.question_count - 1 ? "Finish →" : "Continue →"}
             </button>
           </div>
         </section>
@@ -787,9 +806,55 @@ export default function HostPage() {
             <h1>Thank You</h1>
             <p>Thank you for playing and for being part of my QoFa journey.</p>
             <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
-              Back to Lobby
+              See Results
             </button>
           </div>
+        </section>
+      )}
+
+      {/* ── FINAL RESULTS PODIUM ── */}
+      {game.phase === "results" && (
+        <section className="host-full-screen results-full">
+          <div className="results-header">
+            <div className="badge green center-x">Final Results</div>
+            <h1 className="results-main-title">Podium</h1>
+          </div>
+
+          <div className="podium-stage" aria-live="polite">
+            {[rankedPlayers[1], rankedPlayers[0], rankedPlayers[2]].map((playerEntry, slotIndex) => {
+              const place = slotIndex === 0 ? 2 : slotIndex === 1 ? 1 : 3;
+              const requiredStep = place === 3 ? 1 : place === 2 ? 2 : 3;
+              const parsed = splitPlayerName(playerEntry?.name ?? "");
+              const isVisible = Boolean(playerEntry) && podiumStep >= requiredStep;
+
+              return (
+                <div className={`podium-slot place-${place} ${isVisible ? "show" : ""}`} key={place}>
+                  {isVisible ? (
+                    <>
+                      <div className="podium-person">
+                        <div className="podium-emoji">{parsed.emoji}</div>
+                        <div className="podium-name">{parsed.name}</div>
+                        <div className="podium-score">{playerEntry!.score.toLocaleString()} pts</div>
+                      </div>
+                      <div className="podium-block">
+                        <span>{place}{place === 1 ? "st" : place === 2 ? "nd" : "rd"}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="podium-placeholder" />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {podiumStep >= 3 && (
+            <div className="host-bottom-bar centered results-actions">
+              <button className="btn btn-primary btn-xl" onClick={() => hostAction("next")}>
+                Back to Lobby
+              </button>
+            </div>
+          )}
         </section>
       )}
 

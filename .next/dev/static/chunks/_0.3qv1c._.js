@@ -8,127 +8,226 @@ __turbopack_context__.s([
     "sleRounds",
     ()=>sleRounds
 ]);
+function question(entry) {
+    const correctIndexes = entry.answers.map((answer, index)=>answer.correct ? index : -1).filter((index)=>index !== -1);
+    if (correctIndexes.length !== 1) {
+        throw new Error(`Question "${entry.text}" must have exactly one correct answer.`);
+    }
+    return {
+        ...entry,
+        answers: entry.answers.map((answer)=>answer.text),
+        correct: correctIndexes[0]
+    };
+}
 const sleRounds = [
     {
         title: "Caring Christian",
-        definition: "To me, being a Caring Christian is more than just going to Mass. It's about actually seeing when someone is having a bad day and doing something about it, even if it's just a small gesture. It’s following Jesus' example by putting others before myself in the little moments of the day.",
-        claim: "I feel that Caring Christian is my strongest SLE because I consistently look for ways to help my classmates and make sure everyone feels included in our school community.",
-        evidence: "Being a Caring Christian at QoFa has taught me that my actions have a real impact on others. Whether I'm helping my younger buddy with a craft or just holding the door for someone, those small choices build the kind of community I'm proud to be a part of. It’s not about being perfect, it’s about choosing kindness every single day.",
+        definition: "To me, being a Caring Christian is more than just showing up at Mass every Friday at 8:00am. It's about actually noticing and doing something when someone is having a hard day, even if it's just a small act of kindness. Not just when someone is having a bad day, a Caring Christian follows Jesus' example by putting others before themselves in moments of their everyday life.",
+        claim: "I personally feel that Caring Christian is my strongest SLE because I always look for ways to help my classmates and make sure everyone feels included in our school community.",
+        evidence: "At Qofa, I think I have exemplified the Caring Christian SLE when I help my younger buddy or do a simple act, as simple as holding the door for someone or helping them with their stuff. I have also taken that mindset outside of school too. Since 7th grade, over the spring season, I've been running a fundraiser called Loquat4Humanity. I was born prematurely and spent three months in the NICU (Neonatal Intensive Care Unit), so when I found a loquat tree just sitting unused in my backyard, I saw a chance to give back. I started selling the fruit and donating the earnings to the same NICU that once cared for me and this past season, I raised over $500. That experience taught me that being a Caring Christian isn't just about small daily acts, it's also about looking at what you have and asking how it can help someone else. You can’t be perfect, but you can choose the right action everyday.",
         questions: [
-            {
-                text: "If you see a classmate sitting alone at lunch looking upset, what would a Caring Christian do?",
+            question({
+                text: "What is something you can do to be a Caring Christian?",
                 answers: [
-                    "Walk past and ignore them",
-                    "Go over and ask if they're okay",
-                    "Tell a teacher later",
-                    "Take a picture for social media"
+                    {
+                        text: "Study hard and never give up on assignments",
+                        correct: false
+                    },
+                    {
+                        text: "Stay active and eat healthy every day",
+                        correct: false
+                    },
+                    {
+                        text: "Notice when someone is struggling and do something about it",
+                        correct: true
+                    },
+                    {
+                        text: "Manage your time and meet your deadlines",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Kindness is about action. Going over to someone might seem small, but it can change their whole day."
-            },
-            {
-                text: "What is a way I've tried to show I care about our school community at QoFa?",
+                story: "Being a Caring Christian is helping someone who is struggling and acting with kindness."
+            }),
+            question({
+                text: "What fruit did I use to raise over $500 for the NICU?",
                 answers: [
-                    "Organizing a secret snack club",
-                    "Helping my younger buddy with projects",
-                    "Always being the first to leave",
-                    "Volunteering to clean the lunch tables"
+                    {
+                        text: "Mango",
+                        correct: false
+                    },
+                    {
+                        text: "Loquat",
+                        correct: true
+                    },
+                    {
+                        text: "Persimmon",
+                        correct: false
+                    },
+                    {
+                        text: "Fig",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Working with my younger buddy is one of my favorite parts of my time at QoFa. It has taught me how to be patient, lead by example, and really put someone else's needs before my own. This experience is a big part of why I feel strongest about being a Caring Christian."
-            }
+                story: "As I stated earlier, I spent my first three months in the NICU, and when I found out in my backyard that there was this precious fruit that was very underrated (loquats), I decided to raise money and give back for something that was very important to me."
+            })
         ]
     },
     {
         title: "Active Learner",
         definition: "Being an Active Learner means I don't just sit in class waiting for the bell to ring. I ask questions, dive into projects, and even when I run into a bug in my code, I don't give up until I figure it out.",
-        claim: "I have moderately achieved this SLE by always giving my best effort on my assignments and showing curiosity in my favorite subjects like science and technology.",
-        evidence: "Building this game was a huge learning experience for me as an Active Learner. I had to learn how to use new tools, troubleshoot errors, and keep refining the design until it worked exactly how I wanted. It showed me that if I stay engaged and keep problem-solving, I can create something really cool.",
+        claim: "I have achieved this SLE by always giving my best effort on my assignments and showing enthusiasm in all subjects, even when the material gets challenging, the day gets pretty long, or I had a rough night.",
+        evidence: "At Qofa, I have shown the Active Learner SLE, but it’s more than just finishing my homework. It means walking into class even on a hard day and choosing to actually be there not just physically, but mentally. There were plenty of mornings from my two years where I was tired and it would've been easy to just zone out, but I tried to stay engaged, and I have to admit, I am not perfect, but you can’t catch me sleeping in class, never.",
         questions: [
-            {
-                text: "What is the best way to handle a difficult math problem you don't understand?",
+            question({
+                text: "What is something an Active Learner does when they don't understand something in class?",
                 answers: [
-                    "Skip it and move on",
-                    "Copy the answer from a friend",
-                    "Ask for help and keep trying",
-                    "Close your notebook and sleep"
+                    {
+                        text: "Wait and hope it makes sense later",
+                        correct: false
+                    },
+                    {
+                        text: "Ask a question even if it sounds dumb",
+                        correct: true
+                    },
+                    {
+                        text: "Copy what the person next to them wrote",
+                        correct: false
+                    },
+                    {
+                        text: "Stare out the window and think about lunch",
+                        correct: false
+                    }
                 ],
-                correct: 2,
-                story: "Learning isn't about knowing everything right away; it's about the effort you put in to understand it."
-            },
-            {
-                text: "What was the biggest challenge I faced while building this custom quiz game?",
+                story: "Personally, during 6th grade, I was scared to ask a question if I thought it sounded dumb, and all my questions sounded dumb back then. But now, building that confidence, I try to ask questions even if I think it sounds dumb."
+            }),
+            question({
+                text: "No matter how tired I am, what is something you will never catch me doing in class?",
                 answers: [
-                    "Choosing the background color",
-                    "Debugging the real-time scores",
-                    "Typing my name correctly",
-                    "Finding the login button"
+                    {
+                        text: "Asking too many questions",
+                        correct: false
+                    },
+                    {
+                        text: "Sleeping",
+                        correct: true
+                    },
+                    {
+                        text: "Taking notes",
+                        correct: false
+                    },
+                    {
+                        text: "Paying attention",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Getting the real-time leaderboard to work was definitely the biggest challenge of this whole project. I spent hours debugging the code and testing it with my friends to make sure every tap was recorded correctly. It taught me that being an Active Learner is all about sticking with a problem until it's solved.",
+                story: "No matter what, you will never catch me sleeping in class. I have to admit, I am not perfect, but I just can't sleep in class.",
                 pointsMultiplier: 2
-            }
+            })
         ]
     },
     {
         title: "Self-Confident & Responsible",
-        definition: "This SLE is about owning my work and believing in myself when I'm stepping outside my comfort zone. It’s taking responsibility for my deadlines while also having the confidence to present my ideas to the whole class.",
-        claim: "I have shown growth in this area by managing my time better this year and becoming more comfortable leading group discussions.",
-        evidence: "Taking on responsibilities like being a team captain has really helped my self-confidence grow at QoFa. I’ve learned how to lead by example and stay organized even when things get stressful. Owning my mistakes and learning from them has made me much more responsible for my own success.",
+        definition: "Being a Self-Confident and Responsible individual means believing in yourself even when the situation feels uncomfortable or scary. It's about walking into a room and trusting that you belong there, whether that's raising your hand with an answer you're not 100% sure about, speaking in front of the whole class like we all have to do for our SLE presentation, or stepping into a leadership position you've never had before. Confidence is something you build every time you choose the hard way, not by taking the shortcut or the \"easy way out\".",
+        claim: "I have shown real growth in this area by managing my time better this year and becoming more comfortable in leading positions and speaking in front of crowds.",
+        evidence: "One of the biggest things that helped my confidence grow at Qofa was being the Head 8th Grade Coordinator for the yearbook. I had to work with Austin, Julia, Annie, and Hannah to make sure everything came together for the 8th grade graduation part of the yearbook. It was truly amazing to lead, plan all the events like the Quotes, Signatures, and more, and speak in front of everyone to make sure our yearbook would be full of memories for all of us.",
         questions: [
-            {
-                text: "You realize you forgot to do a homework assignment due today. What should a responsible student do?",
+            question({
+                text: "What position did I have on Yearbook this year?",
                 answers: [
-                    "Hide it and hope it's not checked",
-                    "Admit the mistake and turn it in late",
-                    "Blame the printer or the dog",
-                    "Ask the teacher to cancel it"
+                    {
+                        text: "8th Grade Coordinator",
+                        correct: false
+                    },
+                    {
+                        text: "Head 8th Grade Coordinator",
+                        correct: true
+                    },
+                    {
+                        text: "Yearbook Editor",
+                        correct: false
+                    },
+                    {
+                        text: "Photo Manager",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Responsibility is about owning your actions, even the ones you wish you could undo."
-            },
-            {
-                text: "What is a leadership role or responsibility I took on during my time at QoFa?",
+                story: "Being the Head 8th Grade Coordinator was an honor and working with Austin, Julia, Annie, and Hannah was the best part.",
+                pointsMultiplier: 2
+            }),
+            question({
+                text: "What does it mean to be Self-Confident and Responsible?",
                 answers: [
-                    "Chief of the Pencil Sharpeners",
-                    "Captain of the Basketball team",
-                    "Being a Student Council rep",
-                    "Master of the Silent Game"
+                    {
+                        text: "Always having the right answer",
+                        correct: false
+                    },
+                    {
+                        text: "Avoiding situations that make you nervous",
+                        correct: false
+                    },
+                    {
+                        text: "Believing in yourself and stepping up even when it's uncomfortable",
+                        correct: true
+                    },
+                    {
+                        text: "Only taking on roles you already know how to do",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Being the captain of the basketball team was a huge responsibility that really pushed me to grow. I had to learn how to keep the team focused during tough games and own up to my own mistakes on the court. It built my confidence in leading others and taking charge of my own actions."
-            }
+                story: "I always try to get out of my comfort zone and try things that make me nervous, and I think that embodies a Self-Confident and Responsible individual."
+            })
         ]
     },
     {
         title: "Healthy Individual",
-        definition: "Being a Healthy Individual isn't just about gym class; it’s about taking care of my whole self—my body, my mind, and my friendships. It means making choices that keep me energized and ready to take on the day, whether on the field or in the classroom.",
-        claim: "I have achieved this SLE by staying active in sports and learning how to handle stress in a positive way.",
-        evidence: "Playing basketball and flag football at QoFa has been about more than just exercise. It taught me how to stay disciplined, work as part of a team, and bounce back after a loss. These sports have helped me stay physically fit and mentally strong throughout my middle school years.",
+        definition: "Being a Healthy Individual isn’t just about playing sports for me,  it’s about taking care of my body, my mind, and my relationships with others. It means making choices that keep the space around me positive.",
+        claim: "I have achieved this SLE by staying active in sports and learning how to handle stress in a positive, healthy way throughout middle school.",
+        evidence: "From 4th-6th grade, I played soccer for the Santa Clara Lions as a center-midfielder where I learned lots of amazing qualities that I apply into everyday use. At Qofa, I advanced into two more sports, playing basketball and flag football through all the years, unfortunately cutting my season short in 8th grade due to a broken wrist during the first practice of the season. Moreover, as a vegetarian, I try to control the amount of processed foods I eat, whether it’s chips or candy, and eat more vegetables, whole grains, and foods that contain protein.",
         questions: [
-            {
-                text: "After a long and stressful school day, what is a healthy way to recharge?",
+            question({
+                text: "What is something a Healthy Individual does to take care of themselves beyond just playing sports?",
                 answers: [
-                    "Eating three bags of chips",
-                    "Going for a run or playing a sport",
-                    "Staying up all night on a screen",
-                    "Complaining to everyone you see"
+                    {
+                        text: "Eat as much junk food as possible before practice",
+                        correct: false
+                    },
+                    {
+                        text: "Stay up late every night watching videos",
+                        correct: false
+                    },
+                    {
+                        text: "Make mindful food choices and keep the space around them positive",
+                        correct: true
+                    },
+                    {
+                        text: "Only focus on physical health and ignore everything else",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Staying active helps clear my head and keeps me ready for whatever comes next."
-            },
-            {
-                text: "Which two sports have been the most important part of my journey to becoming a Healthy Individual?",
+                story: "When someone thinks of Healthy Individual, they think of someone who plays lots of sports. But something as simple as eating healthy and making the space around you positive is just as important."
+            }),
+            question({
+                text: "What two sports did I play at QoFa?",
                 answers: [
-                    "Basketball and Flag Football",
-                    "Fencing and Water Polo",
-                    "Bowling and Chess",
-                    "Soccer and Swimming"
+                    {
+                        text: "Basketball and Soccer",
+                        correct: false
+                    },
+                    {
+                        text: "Soccer and Flag Football",
+                        correct: false
+                    },
+                    {
+                        text: "Basketball and Flag Football",
+                        correct: true
+                    },
+                    {
+                        text: "Volleyball and Basketball",
+                        correct: false
+                    }
                 ],
-                correct: 0,
-                story: "Basketball and flag football have been my favorite ways to stay active and healthy throughout middle school. They've taught me how to handle pressure, respect my body, and balance my sports schedule with my homework. Staying physically fit has really helped me stay mentally sharp in the classroom as well.",
-                pointsMultiplier: 2
-            }
+                story: "Basketball and flag football were the two sports I played at Qofa."
+            })
         ]
     }
 ];
@@ -367,6 +466,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CircularTimer$
 var __TURBOPACK__imported__module__$5b$project$5d2f$components$2f$AnimatedScore$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/components/AnimatedScore.tsx [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/supabase/client.ts [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$game$2d$logic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/utils/game-logic.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.mjs [app-client] (ecmascript) <export default as Plus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/trash-2.mjs [app-client] (ecmascript) <export default as Trash2>");
 ;
 var _s = __turbopack_context__.k.signature();
@@ -430,6 +530,15 @@ const botNames = [
     "Caleb",
     "Jade"
 ];
+function splitPlayerName(playerName = "") {
+    const emojiMatch = playerName.match(/^(\p{Emoji_Presentation})/u);
+    const emoji = emojiMatch ? emojiMatch[1] : "👤";
+    const name = emojiMatch ? playerName.slice(emojiMatch[1].length).trim() : playerName;
+    return {
+        emoji,
+        name: name || playerName
+    };
+}
 function HostPage() {
     _s();
     const [game, setGame] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
@@ -444,6 +553,7 @@ function HostPage() {
     const [countdownLeft, setCountdownLeft] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(__TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$game$2d$logic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["COUNTDOWN_SECONDS"]);
     const [scoreBaselines, setScoreBaselines] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({});
     const [testBotsEnabled, setTestBotsEnabled] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const [podiumStep, setPodiumStep] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(0);
     const botAnswerKeys = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(new Set());
     const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useMemo"])({
         "HostPage.useMemo[supabase]": ()=>(0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$supabase$2f$client$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["createClient"])()
@@ -552,6 +662,36 @@ function HostPage() {
             initializeGame();
         }
     }["HostPage.useEffect"], []);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
+        "HostPage.useEffect": ()=>{
+            if (game?.phase !== "results") {
+                setPodiumStep(0);
+                return;
+            }
+            setPodiumStep(0);
+            const timeouts = [
+                window.setTimeout({
+                    "HostPage.useEffect": ()=>setPodiumStep(1)
+                }["HostPage.useEffect"], 600),
+                window.setTimeout({
+                    "HostPage.useEffect": ()=>setPodiumStep(2)
+                }["HostPage.useEffect"], 1900),
+                window.setTimeout({
+                    "HostPage.useEffect": ()=>{
+                        setPodiumStep(3);
+                        launchConfetti();
+                    }
+                }["HostPage.useEffect"], 3200)
+            ];
+            return ({
+                "HostPage.useEffect": ()=>timeouts.forEach({
+                        "HostPage.useEffect": (timeout)=>window.clearTimeout(timeout)
+                    }["HostPage.useEffect"])
+            })["HostPage.useEffect"];
+        }
+    }["HostPage.useEffect"], [
+        game?.phase
+    ]);
     async function initializeGame() {
         const code = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$game$2d$logic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["generateClassCode"])();
         const { data, error } = await supabase.from('games').insert({
@@ -824,28 +964,39 @@ function HostPage() {
         if (action === "reveal") {
             updates.revealed = true;
         }
-        if (action === "next") {
+        if (action === "next" && game.phase === 'welcome') {
+            updates.phase = 'sle';
+            updates.current_question = 0;
+            updates.revealed = false;
+            updates.pending_sle_index = 0;
+            updates.question_started_at = Date.now();
+            setScoreBaselines(baselinesFrom(players));
+        } else if (action === "next" && game.phase === 'thanks') {
+            updates.phase = 'results';
+        } else if (action === "next" && game.phase === 'results') {
+            updates.phase = 'lobby';
+            updates.current_question = 0;
+            updates.revealed = false;
+            updates.pending_sle_index = null;
+            setAnswers([]);
+        } else if (action === "next") {
             const q = __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$quiz$2d$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["questions"][game.current_question];
             const atRoundEnd = q.questionIndex === __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$quiz$2d$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sleRounds"][q.roundIndex].questions.length - 1;
             const atFinalQuestion = game.current_question >= __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$quiz$2d$data$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["questions"].length - 1;
             if (game.phase === 'sle') {
-                if (atFinalQuestion) {
-                    updates.phase = 'leaderboard';
-                    launchConfetti();
-                } else {
-                    updates.phase = 'countdown';
-                    updates.current_question = game.current_question + 1;
-                    updates.revealed = false;
-                    updates.pending_sle_index = null;
-                    updates.question_started_at = Date.now();
-                    setScoreBaselines(baselinesFrom(players));
-                }
+                updates.phase = 'countdown';
+                updates.revealed = false;
+                updates.pending_sle_index = null;
+                updates.question_started_at = Date.now();
+                setScoreBaselines(baselinesFrom(players));
             } else if (game.phase === 'leaderboard') {
-                if (atFinalQuestion && game.pending_sle_index === q.roundIndex) {
+                if (atFinalQuestion) {
                     updates.phase = 'thanks';
                 } else if (atRoundEnd) {
                     updates.phase = 'sle';
-                    updates.pending_sle_index = q.roundIndex;
+                    updates.current_question = game.current_question + 1;
+                    updates.revealed = false;
+                    updates.pending_sle_index = q.roundIndex + 1;
                 } else {
                     updates.phase = 'countdown';
                     updates.current_question = game.current_question + 1;
@@ -857,21 +1008,6 @@ function HostPage() {
             } else {
                 updates.phase = 'leaderboard';
             }
-        }
-        if (action === "next" && game.phase === 'welcome') {
-            updates.phase = 'countdown';
-            updates.current_question = 0;
-            updates.revealed = false;
-            updates.pending_sle_index = null;
-            updates.question_started_at = Date.now();
-            setScoreBaselines(baselinesFrom(players));
-        }
-        if (action === "next" && game.phase === 'thanks') {
-            updates.phase = 'lobby';
-            updates.current_question = 0;
-            updates.revealed = false;
-            updates.pending_sle_index = null;
-            setAnswers([]);
         }
         const { data } = await supabase.from('games').update(updates).eq('id', game.id).select().single();
         if (data) {
@@ -956,7 +1092,7 @@ function HostPage() {
                                     children: "Host Access"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 439,
+                                    lineNumber: 460,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -964,13 +1100,13 @@ function HostPage() {
                                     children: "Enter the host password to continue."
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 440,
+                                    lineNumber: 461,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 438,
+                            lineNumber: 459,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -989,12 +1125,12 @@ function HostPage() {
                                         suppressHydrationWarning: true
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 444,
+                                        lineNumber: 465,
                                         columnNumber: 17
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 443,
+                                    lineNumber: 464,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1003,7 +1139,7 @@ function HostPage() {
                                     children: "Enter"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 455,
+                                    lineNumber: 476,
                                     columnNumber: 15
                                 }, this),
                                 password !== "" && password !== "cwb" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1011,29 +1147,29 @@ function HostPage() {
                                     children: "Incorrect password"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 461,
+                                    lineNumber: 482,
                                     columnNumber: 57
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 442,
+                            lineNumber: 463,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/host/page.tsx",
-                    lineNumber: 437,
+                    lineNumber: 458,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 436,
+                lineNumber: 457,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/host/page.tsx",
-            lineNumber: 435,
+            lineNumber: 456,
             columnNumber: 7
         }, this);
     }
@@ -1044,12 +1180,12 @@ function HostPage() {
                 className: "spinner"
             }, void 0, false, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 472,
+                lineNumber: 493,
                 columnNumber: 9
             }, this)
         }, void 0, false, {
             fileName: "[project]/app/host/page.tsx",
-            lineNumber: 471,
+            lineNumber: 492,
             columnNumber: 7
         }, this);
     }
@@ -1064,10 +1200,10 @@ function HostPage() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "badge",
-                                children: "Host Control Panel"
+                                children: "Game Control Panel"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 484,
+                                lineNumber: 505,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1076,13 +1212,13 @@ function HostPage() {
                                 children: "Reset"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 485,
+                                lineNumber: 506,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 483,
+                        lineNumber: 504,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1092,21 +1228,21 @@ function HostPage() {
                                 children: "How Well Do You Know Aadit?"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 491,
+                                lineNumber: 512,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 className: "subtitle",
-                                children: "Students join on their devices. Show this screen on the projector."
+                                children: "Use the code on screen to join the game. Thank you for playing!"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 492,
+                                lineNumber: 513,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 490,
+                        lineNumber: 511,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1137,7 +1273,7 @@ function HostPage() {
                                         children: "Class Code"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 499,
+                                        lineNumber: 520,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1145,13 +1281,13 @@ function HostPage() {
                                         children: game.code
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 502,
+                                        lineNumber: 523,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 498,
+                                lineNumber: 519,
                                 columnNumber: 13
                             }, this),
                             joinUrl && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1172,7 +1308,7 @@ function HostPage() {
                                         children: "Or Scan"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 507,
+                                        lineNumber: 528,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1185,18 +1321,18 @@ function HostPage() {
                                             level: "M"
                                         }, void 0, false, {
                                             fileName: "[project]/app/host/page.tsx",
-                                            lineNumber: 511,
+                                            lineNumber: 532,
                                             columnNumber: 19
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 510,
+                                        lineNumber: 531,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 506,
+                                lineNumber: 527,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1215,27 +1351,24 @@ function HostPage() {
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 523,
+                                    lineNumber: 544,
                                     columnNumber: 15
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 522,
+                                lineNumber: 543,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 497,
+                        lineNumber: 518,
                         columnNumber: 11
                     }, this),
                     players.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "player-cards-grid",
                         children: players.map((p)=>{
-                            // Extract emoji and base name
-                            const emojiMatch = p.name.match(/^(\p{Emoji_Presentation})/u);
-                            const emoji = emojiMatch ? emojiMatch[1] : '👤';
-                            const baseName = emojiMatch ? p.name.slice(emojiMatch[1].length).trim() : p.name;
+                            const { emoji, name: baseName } = splitPlayerName(p.name);
                             return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "player-card",
                                 onClick: ()=>kickPlayer(p.id, p.name),
@@ -1245,7 +1378,7 @@ function HostPage() {
                                         children: emoji
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 537,
+                                        lineNumber: 555,
                                         columnNumber: 21
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1253,7 +1386,7 @@ function HostPage() {
                                         children: baseName
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 538,
+                                        lineNumber: 556,
                                         columnNumber: 21
                                     }, this),
                                     (playerStreaks[p.id] ?? 0) > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1264,7 +1397,7 @@ function HostPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 540,
+                                        lineNumber: 558,
                                         columnNumber: 23
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trash$2d$2$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Trash2$3e$__["Trash2"], {
@@ -1272,34 +1405,53 @@ function HostPage() {
                                         size: 16
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 542,
+                                        lineNumber: 560,
                                         columnNumber: 21
                                     }, this)
                                 ]
                             }, p.id, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 536,
+                                lineNumber: 554,
                                 columnNumber: 19
                             }, this);
                         })
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 529,
+                        lineNumber: 550,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                         className: "button-row",
                         children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                className: "btn btn-primary btn-lg",
+                                onClick: ()=>hostAction("start"),
+                                disabled: players.length === 0,
+                                children: "Start Round"
+                            }, void 0, false, {
+                                fileName: "[project]/app/host/page.tsx",
+                                lineNumber: 568,
+                                columnNumber: 13
+                            }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "host-test-controls",
                                 children: [
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                         className: `btn btn-ghost btn-lg test-mode-toggle ${testBotsEnabled ? "active" : ""}`,
                                         onClick: toggleTestBots,
-                                        children: testBotsEnabled ? "Test Bots: On" : "Test Bots: Off"
+                                        "aria-expanded": testBotsEnabled,
+                                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                            size: 30,
+                                            strokeWidth: 2.6,
+                                            "aria-hidden": "true"
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/host/page.tsx",
+                                            lineNumber: 581,
+                                            columnNumber: 17
+                                        }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 551,
+                                        lineNumber: 576,
                                         columnNumber: 15
                                     }, this),
                                     testBotsEnabled && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1309,35 +1461,25 @@ function HostPage() {
                                         children: botCount > 0 ? `${botCount} Bots Ready` : "Add 35 Test Bots"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 558,
+                                        lineNumber: 584,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 550,
-                                columnNumber: 13
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                className: "btn btn-primary btn-lg",
-                                onClick: ()=>hostAction("start"),
-                                disabled: players.length === 0,
-                                children: "Start Round"
-                            }, void 0, false, {
-                                fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 567,
+                                lineNumber: 575,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 549,
+                        lineNumber: 567,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 482,
+                lineNumber: 503,
                 columnNumber: 9
             }, this),
             game.phase === "welcome" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1350,21 +1492,21 @@ function HostPage() {
                             children: "QoFa 8th Grade SLE Project"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 582,
+                            lineNumber: 601,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                             children: "Welcome"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 583,
+                            lineNumber: 602,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             children: "How Well Do You Know Aadit?"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 584,
+                            lineNumber: 603,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1373,18 +1515,18 @@ function HostPage() {
                             children: "Begin →"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 585,
+                            lineNumber: 604,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/host/page.tsx",
-                    lineNumber: 581,
+                    lineNumber: 600,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 580,
+                lineNumber: 599,
                 columnNumber: 9
             }, this),
             game.phase === "countdown" && question && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1395,7 +1537,7 @@ function HostPage() {
                         children: question.pointsMultiplier === 2 ? "Next Question" : "Next Question"
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 595,
+                        lineNumber: 614,
                         columnNumber: 11
                     }, this),
                     question.pointsMultiplier === 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1405,20 +1547,20 @@ function HostPage() {
                                 children: "Double Points"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 600,
+                                lineNumber: 619,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
                                 children: "×2"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 601,
+                                lineNumber: 620,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 599,
+                        lineNumber: 618,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1426,7 +1568,7 @@ function HostPage() {
                         children: countdownLeft
                     }, countdownLeft, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 604,
+                        lineNumber: 623,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1434,13 +1576,13 @@ function HostPage() {
                         children: question.round
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 607,
+                        lineNumber: 626,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 594,
+                lineNumber: 613,
                 columnNumber: 9
             }, this),
             game.phase === "question" && question && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1457,7 +1599,7 @@ function HostPage() {
                                         children: "Answers"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 616,
+                                        lineNumber: 635,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1469,13 +1611,13 @@ function HostPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 617,
+                                        lineNumber: 636,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 615,
+                                lineNumber: 634,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$components$2f$CircularTimer$2e$tsx__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"], {
@@ -1484,7 +1626,7 @@ function HostPage() {
                                 size: "lg"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 619,
+                                lineNumber: 638,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1495,7 +1637,7 @@ function HostPage() {
                                         children: "Round"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 621,
+                                        lineNumber: 640,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1503,19 +1645,19 @@ function HostPage() {
                                         children: question.round
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 622,
+                                        lineNumber: 641,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 620,
+                                lineNumber: 639,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 614,
+                        lineNumber: 633,
                         columnNumber: 11
                     }, this),
                     question.pointsMultiplier === 2 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1527,25 +1669,25 @@ function HostPage() {
                                     children: "Double Points"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 629,
+                                    lineNumber: 648,
                                     columnNumber: 17
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("b", {
                                     children: "×2"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 630,
+                                    lineNumber: 649,
                                     columnNumber: 17
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 628,
+                            lineNumber: 647,
                             columnNumber: 15
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 627,
+                        lineNumber: 646,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1555,12 +1697,12 @@ function HostPage() {
                             children: question.text
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 636,
+                            lineNumber: 655,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 635,
+                        lineNumber: 654,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1573,7 +1715,7 @@ function HostPage() {
                                         children: letters[index]
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 645,
+                                        lineNumber: 664,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1581,18 +1723,18 @@ function HostPage() {
                                         children: ans
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 646,
+                                        lineNumber: 665,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, ans, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 641,
+                                lineNumber: 660,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 639,
+                        lineNumber: 658,
                         columnNumber: 11
                     }, this),
                     game.revealed && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1614,12 +1756,12 @@ function HostPage() {
                                                     children: count
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/host/page.tsx",
-                                                    lineNumber: 665,
+                                                    lineNumber: 684,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 664,
+                                                lineNumber: 683,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1632,12 +1774,12 @@ function HostPage() {
                                                     }
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/host/page.tsx",
-                                                    lineNumber: 668,
+                                                    lineNumber: 687,
                                                     columnNumber: 23
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 667,
+                                                lineNumber: 686,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1645,7 +1787,7 @@ function HostPage() {
                                                 children: letters[index]
                                             }, void 0, false, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 676,
+                                                lineNumber: 695,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1659,7 +1801,7 @@ function HostPage() {
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/app/host/page.tsx",
-                                                        lineNumber: 678,
+                                                        lineNumber: 697,
                                                         columnNumber: 23
                                                     }, this),
                                                     selectedNames.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1667,36 +1809,36 @@ function HostPage() {
                                                                 children: name
                                                             }, name, false, {
                                                                 fileName: "[project]/app/host/page.tsx",
-                                                                lineNumber: 682,
+                                                                lineNumber: 701,
                                                                 columnNumber: 29
                                                             }, this))
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/host/page.tsx",
-                                                        lineNumber: 680,
+                                                        lineNumber: 699,
                                                         columnNumber: 25
                                                     }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: "No responses yet"
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/host/page.tsx",
-                                                        lineNumber: 686,
+                                                        lineNumber: 705,
                                                         columnNumber: 25
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 677,
+                                                lineNumber: 696,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, letters[index], true, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 658,
+                                        lineNumber: 677,
                                         columnNumber: 19
                                     }, this);
                                 })
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 653,
+                                lineNumber: 672,
                                 columnNumber: 15
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1704,13 +1846,13 @@ function HostPage() {
                                 children: question.story
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 693,
+                                lineNumber: 712,
                                 columnNumber: 15
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 652,
+                        lineNumber: 671,
                         columnNumber: 13
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1727,7 +1869,7 @@ function HostPage() {
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 699,
+                                        lineNumber: 718,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1735,13 +1877,13 @@ function HostPage() {
                                         children: "Points"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 700,
+                                        lineNumber: 719,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 698,
+                                lineNumber: 717,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1752,24 +1894,24 @@ function HostPage() {
                                     children: "Next →"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 704,
+                                    lineNumber: 723,
                                     columnNumber: 17
                                 }, this) : null
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 702,
+                                lineNumber: 721,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 697,
+                        lineNumber: 716,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 613,
+                lineNumber: 632,
                 columnNumber: 9
             }, this),
             game.phase === "sle" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1783,7 +1925,7 @@ function HostPage() {
                                 children: "Schoolwide Learning Expectation"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 717,
+                                lineNumber: 736,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -1791,13 +1933,13 @@ function HostPage() {
                                 children: sle.title
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 718,
+                                lineNumber: 737,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 716,
+                        lineNumber: 735,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1811,7 +1953,7 @@ function HostPage() {
                                         children: "Definition"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 723,
+                                        lineNumber: 742,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1819,13 +1961,13 @@ function HostPage() {
                                         children: sle.definition
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 724,
+                                        lineNumber: 743,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 722,
+                                lineNumber: 741,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1836,7 +1978,7 @@ function HostPage() {
                                         children: "Achievement Claim"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 727,
+                                        lineNumber: 746,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1844,13 +1986,13 @@ function HostPage() {
                                         children: sle.claim
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 728,
+                                        lineNumber: 747,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 726,
+                                lineNumber: 745,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1861,7 +2003,7 @@ function HostPage() {
                                         children: "My Evidence"
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 731,
+                                        lineNumber: 750,
                                         columnNumber: 15
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1869,19 +2011,19 @@ function HostPage() {
                                         children: sle.evidence
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 732,
+                                        lineNumber: 751,
                                         columnNumber: 15
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 730,
+                                lineNumber: 749,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 721,
+                        lineNumber: 740,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1892,18 +2034,18 @@ function HostPage() {
                             children: "Continue Quiz →"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 737,
+                            lineNumber: 756,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 736,
+                        lineNumber: 755,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 715,
+                lineNumber: 734,
                 columnNumber: 9
             }, this),
             game.phase === "leaderboard" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -1914,10 +2056,10 @@ function HostPage() {
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                 className: "badge green",
-                                children: game.current_question >= game.question_count - 1 && game.pending_sle_index === question?.roundIndex ? "Final Results" : "After This Question"
+                                children: game.current_question >= game.question_count - 1 ? "Final Results" : "After This Question"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 748,
+                                lineNumber: 767,
                                 columnNumber: 13
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
@@ -1925,13 +2067,13 @@ function HostPage() {
                                 children: "Top 5 Scores"
                             }, void 0, false, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 749,
+                                lineNumber: 768,
                                 columnNumber: 13
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 747,
+                        lineNumber: 766,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1944,7 +2086,7 @@ function HostPage() {
                                         children: i + 1
                                     }, void 0, false, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 755,
+                                        lineNumber: 774,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1955,7 +2097,7 @@ function HostPage() {
                                                 children: p.name
                                             }, void 0, false, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 757,
+                                                lineNumber: 776,
                                                 columnNumber: 19
                                             }, this),
                                             (playerStreaks[p.id] ?? 0) > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1967,13 +2109,13 @@ function HostPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 759,
+                                                lineNumber: 778,
                                                 columnNumber: 21
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 756,
+                                        lineNumber: 775,
                                         columnNumber: 17
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1987,7 +2129,7 @@ function HostPage() {
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 764,
+                                                lineNumber: 783,
                                                 columnNumber: 21
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1997,29 +2139,29 @@ function HostPage() {
                                                     to: p.score
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/host/page.tsx",
-                                                    lineNumber: 767,
+                                                    lineNumber: 786,
                                                     columnNumber: 21
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/app/host/page.tsx",
-                                                lineNumber: 766,
+                                                lineNumber: 785,
                                                 columnNumber: 19
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/app/host/page.tsx",
-                                        lineNumber: 762,
+                                        lineNumber: 781,
                                         columnNumber: 17
                                     }, this)
                                 ]
                             }, p.id, true, {
                                 fileName: "[project]/app/host/page.tsx",
-                                lineNumber: 754,
+                                lineNumber: 773,
                                 columnNumber: 15
                             }, this))
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 752,
+                        lineNumber: 771,
                         columnNumber: 11
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2027,21 +2169,21 @@ function HostPage() {
                         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             className: "btn btn-primary btn-xl",
                             onClick: ()=>hostAction("next"),
-                            children: game.current_question >= game.question_count - 1 && game.pending_sle_index === question?.roundIndex ? "Back to Lobby" : "Continue →"
+                            children: game.current_question >= game.question_count - 1 ? "Finish →" : "Continue →"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 775,
+                            lineNumber: 794,
                             columnNumber: 13
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 774,
+                        lineNumber: 793,
                         columnNumber: 11
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 746,
+                lineNumber: 765,
                 columnNumber: 9
             }, this),
             game.phase === "thanks" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -2054,41 +2196,179 @@ function HostPage() {
                             children: "Presentation Complete"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 786,
+                            lineNumber: 805,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
                             children: "Thank You"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 787,
+                            lineNumber: 806,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             children: "Thank you for playing and for being part of my QoFa journey."
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 788,
+                            lineNumber: 807,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             className: "btn btn-primary btn-xl",
                             onClick: ()=>hostAction("next"),
-                            children: "Back to Lobby"
+                            children: "See Results"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 789,
+                            lineNumber: 808,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/host/page.tsx",
-                    lineNumber: 785,
+                    lineNumber: 804,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 784,
+                lineNumber: 803,
+                columnNumber: 9
+            }, this),
+            game.phase === "results" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                className: "host-full-screen results-full",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "results-header",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "badge green center-x",
+                                children: "Final Results"
+                            }, void 0, false, {
+                                fileName: "[project]/app/host/page.tsx",
+                                lineNumber: 819,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                                className: "results-main-title",
+                                children: "Podium"
+                            }, void 0, false, {
+                                fileName: "[project]/app/host/page.tsx",
+                                lineNumber: 820,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/app/host/page.tsx",
+                        lineNumber: 818,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "podium-stage",
+                        "aria-live": "polite",
+                        children: [
+                            rankedPlayers[1],
+                            rankedPlayers[0],
+                            rankedPlayers[2]
+                        ].map((playerEntry, slotIndex)=>{
+                            const place = slotIndex === 0 ? 2 : slotIndex === 1 ? 1 : 3;
+                            const requiredStep = place === 3 ? 1 : place === 2 ? 2 : 3;
+                            const parsed = splitPlayerName(playerEntry?.name ?? "");
+                            const isVisible = Boolean(playerEntry) && podiumStep >= requiredStep;
+                            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: `podium-slot place-${place} ${isVisible ? "show" : ""}`,
+                                children: isVisible ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "podium-person",
+                                            children: [
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "podium-emoji",
+                                                    children: parsed.emoji
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/host/page.tsx",
+                                                    lineNumber: 835,
+                                                    columnNumber: 25
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "podium-name",
+                                                    children: parsed.name
+                                                }, void 0, false, {
+                                                    fileName: "[project]/app/host/page.tsx",
+                                                    lineNumber: 836,
+                                                    columnNumber: 25
+                                                }, this),
+                                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                                    className: "podium-score",
+                                                    children: [
+                                                        playerEntry.score.toLocaleString(),
+                                                        " pts"
+                                                    ]
+                                                }, void 0, true, {
+                                                    fileName: "[project]/app/host/page.tsx",
+                                                    lineNumber: 837,
+                                                    columnNumber: 25
+                                                }, this)
+                                            ]
+                                        }, void 0, true, {
+                                            fileName: "[project]/app/host/page.tsx",
+                                            lineNumber: 834,
+                                            columnNumber: 23
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            className: "podium-block",
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                children: [
+                                                    place,
+                                                    place === 1 ? "st" : place === 2 ? "nd" : "rd"
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/app/host/page.tsx",
+                                                lineNumber: 840,
+                                                columnNumber: 25
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/app/host/page.tsx",
+                                            lineNumber: 839,
+                                            columnNumber: 23
+                                        }, this)
+                                    ]
+                                }, void 0, true) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "podium-placeholder"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/host/page.tsx",
+                                    lineNumber: 844,
+                                    columnNumber: 21
+                                }, this)
+                            }, place, false, {
+                                fileName: "[project]/app/host/page.tsx",
+                                lineNumber: 831,
+                                columnNumber: 17
+                            }, this);
+                        })
+                    }, void 0, false, {
+                        fileName: "[project]/app/host/page.tsx",
+                        lineNumber: 823,
+                        columnNumber: 11
+                    }, this),
+                    podiumStep >= 3 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "host-bottom-bar centered results-actions",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            className: "btn btn-primary btn-xl",
+                            onClick: ()=>hostAction("next"),
+                            children: "Back to Lobby"
+                        }, void 0, false, {
+                            fileName: "[project]/app/host/page.tsx",
+                            lineNumber: 853,
+                            columnNumber: 15
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/app/host/page.tsx",
+                        lineNumber: 852,
+                        columnNumber: 13
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/host/page.tsx",
+                lineNumber: 817,
                 columnNumber: 9
             }, this),
             kickModal && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2103,14 +2383,14 @@ function HostPage() {
                             children: "🗑️"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 800,
+                            lineNumber: 865,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
                             children: "Remove Player"
                         }, void 0, false, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 801,
+                            lineNumber: 866,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -2121,14 +2401,14 @@ function HostPage() {
                                     children: kickModal.name
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 802,
+                                    lineNumber: 867,
                                     columnNumber: 71
                                 }, this),
                                 " from the game?"
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 802,
+                            lineNumber: 867,
                             columnNumber: 13
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2140,7 +2420,7 @@ function HostPage() {
                                     children: "Cancel"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 804,
+                                    lineNumber: 869,
                                     columnNumber: 15
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -2149,24 +2429,24 @@ function HostPage() {
                                     children: "Remove"
                                 }, void 0, false, {
                                     fileName: "[project]/app/host/page.tsx",
-                                    lineNumber: 805,
+                                    lineNumber: 870,
                                     columnNumber: 15
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/host/page.tsx",
-                            lineNumber: 803,
+                            lineNumber: 868,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/host/page.tsx",
-                    lineNumber: 799,
+                    lineNumber: 864,
                     columnNumber: 11
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 798,
+                lineNumber: 863,
                 columnNumber: 9
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -2181,22 +2461,22 @@ function HostPage() {
                         }
                     }, piece, false, {
                         fileName: "[project]/app/host/page.tsx",
-                        lineNumber: 814,
+                        lineNumber: 879,
                         columnNumber: 11
                     }, this))
             }, void 0, false, {
                 fileName: "[project]/app/host/page.tsx",
-                lineNumber: 812,
+                lineNumber: 877,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/app/host/page.tsx",
-        lineNumber: 478,
+        lineNumber: 499,
         columnNumber: 5
     }, this);
 }
-_s(HostPage, "E1uFuxWdAHPCcskUXSPsST8FJSw=");
+_s(HostPage, "whhNFVt6T/6riQ1M67ZjRJdEEc8=");
 _c = HostPage;
 var _c;
 __turbopack_context__.k.register(_c, "HostPage");

@@ -8,127 +8,226 @@ __turbopack_context__.s([
     "sleRounds",
     ()=>sleRounds
 ]);
+function question(entry) {
+    const correctIndexes = entry.answers.map((answer, index)=>answer.correct ? index : -1).filter((index)=>index !== -1);
+    if (correctIndexes.length !== 1) {
+        throw new Error(`Question "${entry.text}" must have exactly one correct answer.`);
+    }
+    return {
+        ...entry,
+        answers: entry.answers.map((answer)=>answer.text),
+        correct: correctIndexes[0]
+    };
+}
 const sleRounds = [
     {
         title: "Caring Christian",
-        definition: "To me, being a Caring Christian is more than just going to Mass. It's about actually seeing when someone is having a bad day and doing something about it, even if it's just a small gesture. It’s following Jesus' example by putting others before myself in the little moments of the day.",
-        claim: "I feel that Caring Christian is my strongest SLE because I consistently look for ways to help my classmates and make sure everyone feels included in our school community.",
-        evidence: "Being a Caring Christian at QoFa has taught me that my actions have a real impact on others. Whether I'm helping my younger buddy with a craft or just holding the door for someone, those small choices build the kind of community I'm proud to be a part of. It’s not about being perfect, it’s about choosing kindness every single day.",
+        definition: "To me, being a Caring Christian is more than just showing up at Mass every Friday at 8:00am. It's about actually noticing and doing something when someone is having a hard day, even if it's just a small act of kindness. Not just when someone is having a bad day, a Caring Christian follows Jesus' example by putting others before themselves in moments of their everyday life.",
+        claim: "I personally feel that Caring Christian is my strongest SLE because I always look for ways to help my classmates and make sure everyone feels included in our school community.",
+        evidence: "At Qofa, I think I have exemplified the Caring Christian SLE when I help my younger buddy or do a simple act, as simple as holding the door for someone or helping them with their stuff. I have also taken that mindset outside of school too. Since 7th grade, over the spring season, I've been running a fundraiser called Loquat4Humanity. I was born prematurely and spent three months in the NICU (Neonatal Intensive Care Unit), so when I found a loquat tree just sitting unused in my backyard, I saw a chance to give back. I started selling the fruit and donating the earnings to the same NICU that once cared for me and this past season, I raised over $500. That experience taught me that being a Caring Christian isn't just about small daily acts, it's also about looking at what you have and asking how it can help someone else. You can’t be perfect, but you can choose the right action everyday.",
         questions: [
-            {
-                text: "If you see a classmate sitting alone at lunch looking upset, what would a Caring Christian do?",
+            question({
+                text: "What is something you can do to be a Caring Christian?",
                 answers: [
-                    "Walk past and ignore them",
-                    "Go over and ask if they're okay",
-                    "Tell a teacher later",
-                    "Take a picture for social media"
+                    {
+                        text: "Study hard and never give up on assignments",
+                        correct: false
+                    },
+                    {
+                        text: "Stay active and eat healthy every day",
+                        correct: false
+                    },
+                    {
+                        text: "Notice when someone is struggling and do something about it",
+                        correct: true
+                    },
+                    {
+                        text: "Manage your time and meet your deadlines",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Kindness is about action. Going over to someone might seem small, but it can change their whole day."
-            },
-            {
-                text: "What is a way I've tried to show I care about our school community at QoFa?",
+                story: "Being a Caring Christian is helping someone who is struggling and acting with kindness."
+            }),
+            question({
+                text: "What fruit did I use to raise over $500 for the NICU?",
                 answers: [
-                    "Organizing a secret snack club",
-                    "Helping my younger buddy with projects",
-                    "Always being the first to leave",
-                    "Volunteering to clean the lunch tables"
+                    {
+                        text: "Mango",
+                        correct: false
+                    },
+                    {
+                        text: "Loquat",
+                        correct: true
+                    },
+                    {
+                        text: "Persimmon",
+                        correct: false
+                    },
+                    {
+                        text: "Fig",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Working with my younger buddy is one of my favorite parts of my time at QoFa. It has taught me how to be patient, lead by example, and really put someone else's needs before my own. This experience is a big part of why I feel strongest about being a Caring Christian."
-            }
+                story: "As I stated earlier, I spent my first three months in the NICU, and when I found out in my backyard that there was this precious fruit that was very underrated (loquats), I decided to raise money and give back for something that was very important to me."
+            })
         ]
     },
     {
         title: "Active Learner",
         definition: "Being an Active Learner means I don't just sit in class waiting for the bell to ring. I ask questions, dive into projects, and even when I run into a bug in my code, I don't give up until I figure it out.",
-        claim: "I have moderately achieved this SLE by always giving my best effort on my assignments and showing curiosity in my favorite subjects like science and technology.",
-        evidence: "Building this game was a huge learning experience for me as an Active Learner. I had to learn how to use new tools, troubleshoot errors, and keep refining the design until it worked exactly how I wanted. It showed me that if I stay engaged and keep problem-solving, I can create something really cool.",
+        claim: "I have achieved this SLE by always giving my best effort on my assignments and showing enthusiasm in all subjects, even when the material gets challenging, the day gets pretty long, or I had a rough night.",
+        evidence: "At Qofa, I have shown the Active Learner SLE, but it’s more than just finishing my homework. It means walking into class even on a hard day and choosing to actually be there not just physically, but mentally. There were plenty of mornings from my two years where I was tired and it would've been easy to just zone out, but I tried to stay engaged, and I have to admit, I am not perfect, but you can’t catch me sleeping in class, never.",
         questions: [
-            {
-                text: "What is the best way to handle a difficult math problem you don't understand?",
+            question({
+                text: "What is something an Active Learner does when they don't understand something in class?",
                 answers: [
-                    "Skip it and move on",
-                    "Copy the answer from a friend",
-                    "Ask for help and keep trying",
-                    "Close your notebook and sleep"
+                    {
+                        text: "Wait and hope it makes sense later",
+                        correct: false
+                    },
+                    {
+                        text: "Ask a question even if it sounds dumb",
+                        correct: true
+                    },
+                    {
+                        text: "Copy what the person next to them wrote",
+                        correct: false
+                    },
+                    {
+                        text: "Stare out the window and think about lunch",
+                        correct: false
+                    }
                 ],
-                correct: 2,
-                story: "Learning isn't about knowing everything right away; it's about the effort you put in to understand it."
-            },
-            {
-                text: "What was the biggest challenge I faced while building this custom quiz game?",
+                story: "Personally, during 6th grade, I was scared to ask a question if I thought it sounded dumb, and all my questions sounded dumb back then. But now, building that confidence, I try to ask questions even if I think it sounds dumb."
+            }),
+            question({
+                text: "No matter how tired I am, what is something you will never catch me doing in class?",
                 answers: [
-                    "Choosing the background color",
-                    "Debugging the real-time scores",
-                    "Typing my name correctly",
-                    "Finding the login button"
+                    {
+                        text: "Asking too many questions",
+                        correct: false
+                    },
+                    {
+                        text: "Sleeping",
+                        correct: true
+                    },
+                    {
+                        text: "Taking notes",
+                        correct: false
+                    },
+                    {
+                        text: "Paying attention",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Getting the real-time leaderboard to work was definitely the biggest challenge of this whole project. I spent hours debugging the code and testing it with my friends to make sure every tap was recorded correctly. It taught me that being an Active Learner is all about sticking with a problem until it's solved.",
+                story: "No matter what, you will never catch me sleeping in class. I have to admit, I am not perfect, but I just can't sleep in class.",
                 pointsMultiplier: 2
-            }
+            })
         ]
     },
     {
         title: "Self-Confident & Responsible",
-        definition: "This SLE is about owning my work and believing in myself when I'm stepping outside my comfort zone. It’s taking responsibility for my deadlines while also having the confidence to present my ideas to the whole class.",
-        claim: "I have shown growth in this area by managing my time better this year and becoming more comfortable leading group discussions.",
-        evidence: "Taking on responsibilities like being a team captain has really helped my self-confidence grow at QoFa. I’ve learned how to lead by example and stay organized even when things get stressful. Owning my mistakes and learning from them has made me much more responsible for my own success.",
+        definition: "Being a Self-Confident and Responsible individual means believing in yourself even when the situation feels uncomfortable or scary. It's about walking into a room and trusting that you belong there, whether that's raising your hand with an answer you're not 100% sure about, speaking in front of the whole class like we all have to do for our SLE presentation, or stepping into a leadership position you've never had before. Confidence is something you build every time you choose the hard way, not by taking the shortcut or the \"easy way out\".",
+        claim: "I have shown real growth in this area by managing my time better this year and becoming more comfortable in leading positions and speaking in front of crowds.",
+        evidence: "One of the biggest things that helped my confidence grow at Qofa was being the Head 8th Grade Coordinator for the yearbook. I had to work with Austin, Julia, Annie, and Hannah to make sure everything came together for the 8th grade graduation part of the yearbook. It was truly amazing to lead, plan all the events like the Quotes, Signatures, and more, and speak in front of everyone to make sure our yearbook would be full of memories for all of us.",
         questions: [
-            {
-                text: "You realize you forgot to do a homework assignment due today. What should a responsible student do?",
+            question({
+                text: "What position did I have on Yearbook this year?",
                 answers: [
-                    "Hide it and hope it's not checked",
-                    "Admit the mistake and turn it in late",
-                    "Blame the printer or the dog",
-                    "Ask the teacher to cancel it"
+                    {
+                        text: "8th Grade Coordinator",
+                        correct: false
+                    },
+                    {
+                        text: "Head 8th Grade Coordinator",
+                        correct: true
+                    },
+                    {
+                        text: "Yearbook Editor",
+                        correct: false
+                    },
+                    {
+                        text: "Photo Manager",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Responsibility is about owning your actions, even the ones you wish you could undo."
-            },
-            {
-                text: "What is a leadership role or responsibility I took on during my time at QoFa?",
+                story: "Being the Head 8th Grade Coordinator was an honor and working with Austin, Julia, Annie, and Hannah was the best part.",
+                pointsMultiplier: 2
+            }),
+            question({
+                text: "What does it mean to be Self-Confident and Responsible?",
                 answers: [
-                    "Chief of the Pencil Sharpeners",
-                    "Captain of the Basketball team",
-                    "Being a Student Council rep",
-                    "Master of the Silent Game"
+                    {
+                        text: "Always having the right answer",
+                        correct: false
+                    },
+                    {
+                        text: "Avoiding situations that make you nervous",
+                        correct: false
+                    },
+                    {
+                        text: "Believing in yourself and stepping up even when it's uncomfortable",
+                        correct: true
+                    },
+                    {
+                        text: "Only taking on roles you already know how to do",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Being the captain of the basketball team was a huge responsibility that really pushed me to grow. I had to learn how to keep the team focused during tough games and own up to my own mistakes on the court. It built my confidence in leading others and taking charge of my own actions."
-            }
+                story: "I always try to get out of my comfort zone and try things that make me nervous, and I think that embodies a Self-Confident and Responsible individual."
+            })
         ]
     },
     {
         title: "Healthy Individual",
-        definition: "Being a Healthy Individual isn't just about gym class; it’s about taking care of my whole self—my body, my mind, and my friendships. It means making choices that keep me energized and ready to take on the day, whether on the field or in the classroom.",
-        claim: "I have achieved this SLE by staying active in sports and learning how to handle stress in a positive way.",
-        evidence: "Playing basketball and flag football at QoFa has been about more than just exercise. It taught me how to stay disciplined, work as part of a team, and bounce back after a loss. These sports have helped me stay physically fit and mentally strong throughout my middle school years.",
+        definition: "Being a Healthy Individual isn’t just about playing sports for me,  it’s about taking care of my body, my mind, and my relationships with others. It means making choices that keep the space around me positive.",
+        claim: "I have achieved this SLE by staying active in sports and learning how to handle stress in a positive, healthy way throughout middle school.",
+        evidence: "From 4th-6th grade, I played soccer for the Santa Clara Lions as a center-midfielder where I learned lots of amazing qualities that I apply into everyday use. At Qofa, I advanced into two more sports, playing basketball and flag football through all the years, unfortunately cutting my season short in 8th grade due to a broken wrist during the first practice of the season. Moreover, as a vegetarian, I try to control the amount of processed foods I eat, whether it’s chips or candy, and eat more vegetables, whole grains, and foods that contain protein.",
         questions: [
-            {
-                text: "After a long and stressful school day, what is a healthy way to recharge?",
+            question({
+                text: "What is something a Healthy Individual does to take care of themselves beyond just playing sports?",
                 answers: [
-                    "Eating three bags of chips",
-                    "Going for a run or playing a sport",
-                    "Staying up all night on a screen",
-                    "Complaining to everyone you see"
+                    {
+                        text: "Eat as much junk food as possible before practice",
+                        correct: false
+                    },
+                    {
+                        text: "Stay up late every night watching videos",
+                        correct: false
+                    },
+                    {
+                        text: "Make mindful food choices and keep the space around them positive",
+                        correct: true
+                    },
+                    {
+                        text: "Only focus on physical health and ignore everything else",
+                        correct: false
+                    }
                 ],
-                correct: 1,
-                story: "Staying active helps clear my head and keeps me ready for whatever comes next."
-            },
-            {
-                text: "Which two sports have been the most important part of my journey to becoming a Healthy Individual?",
+                story: "When someone thinks of Healthy Individual, they think of someone who plays lots of sports. But something as simple as eating healthy and making the space around you positive is just as important."
+            }),
+            question({
+                text: "What two sports did I play at QoFa?",
                 answers: [
-                    "Basketball and Flag Football",
-                    "Fencing and Water Polo",
-                    "Bowling and Chess",
-                    "Soccer and Swimming"
+                    {
+                        text: "Basketball and Soccer",
+                        correct: false
+                    },
+                    {
+                        text: "Soccer and Flag Football",
+                        correct: false
+                    },
+                    {
+                        text: "Basketball and Flag Football",
+                        correct: true
+                    },
+                    {
+                        text: "Volleyball and Basketball",
+                        correct: false
+                    }
                 ],
-                correct: 0,
-                story: "Basketball and flag football have been my favorite ways to stay active and healthy throughout middle school. They've taught me how to handle pressure, respect my body, and balance my sports schedule with my homework. Staying physically fit has really helped me stay mentally sharp in the classroom as well.",
-                pointsMultiplier: 2
-            }
+                story: "Basketball and flag football were the two sports I played at Qofa."
+            })
         ]
     }
 ];
@@ -801,7 +900,7 @@ function PlayerPage() {
     const supabase = (0, __TURBOPACK__imported__module__$5b$project$5d2f$utils$2f$supabase$2f$client$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["createClient"])();
     const question = game ? __TURBOPACK__imported__module__$5b$project$5d2f$lib$2f$quiz$2d$data$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["questions"][game.current_question] : null;
     const answerResult = game?.revealed && question ? answerChoice === null ? "timeout" : answerChoice === question.correct ? "correct" : "incorrect" : undefined;
-    const finalLeaderboard = Boolean(game && question && game.current_question >= game.question_count - 1 && game.pending_sle_index === question.roundIndex);
+    const finalLeaderboard = Boolean(game && game.current_question >= game.question_count - 1);
     const rankedGamePlayers = [
         ...gamePlayers
     ].sort((a, b)=>b.score - a.score);
@@ -1192,7 +1291,7 @@ function PlayerPage() {
                             className: "stack stack-sm text-center",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                                    children: joinStep === "code" ? "Join Quiz" : "What's Your Name?"
+                                    children: joinStep === "code" ? "Join Game" : "What's Your Name?"
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
                                     lineNumber: 431,
@@ -1200,7 +1299,7 @@ function PlayerPage() {
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     className: "subtitle",
-                                    children: joinStep === "code" ? "Enter the class code shown on the projector." : "Please enter your real name when you join."
+                                    children: joinStep === "code" ? "Enter the class code shown by Aadit on the screen." : "Please enter your real name when you join."
                                 }, void 0, false, {
                                     fileName: "[project]/app/page.tsx",
                                     lineNumber: 432,
@@ -1266,7 +1365,7 @@ function PlayerPage() {
                                                     onChange: (e)=>setCode(e.target.value.toUpperCase()),
                                                     onKeyDown: (e)=>e.key === "Enter" && handleCodeNext(),
                                                     maxLength: 8,
-                                                    placeholder: "e.g. AADIT",
+                                                    placeholder: "Game Code",
                                                     autoCapitalize: "characters",
                                                     autoCorrect: "off",
                                                     autoComplete: "off",
@@ -2299,6 +2398,60 @@ function PlayerPage() {
             }, void 0, true, {
                 fileName: "[project]/app/page.tsx",
                 lineNumber: 828,
+                columnNumber: 9
+            }, this),
+            joined && game?.phase === "results" && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+                className: "player-full-screen player-message-screen player-results-screen",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "badge green center-x",
+                        children: "Final Results"
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 838,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                        children: playerRank ? `You placed ${playerRank}${rankSuffix(playerRank)}` : "Results are up"
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 839,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "player-score-box",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: "Your Points"
+                            }, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 845,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("strong", {
+                                children: (player?.score ?? 0).toLocaleString()
+                            }, void 0, false, {
+                                fileName: "[project]/app/page.tsx",
+                                lineNumber: 846,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 844,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        children: "Look at the screen for the top 3 podium."
+                    }, void 0, false, {
+                        fileName: "[project]/app/page.tsx",
+                        lineNumber: 848,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/page.tsx",
+                lineNumber: 837,
                 columnNumber: 9
             }, this)
         ]

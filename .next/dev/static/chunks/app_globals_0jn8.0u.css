@@ -1080,6 +1080,7 @@ h3 {
 .button-row {
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   gap: 12px;
   display: flex;
 }
@@ -1429,6 +1430,179 @@ h3 {
 
 .rank-1 .score-badge-huge {
   color: #facc15;
+}
+
+.results-full {
+  text-align: center;
+  background: radial-gradient(circle at 50% 18%, #facc1538, #0000 34%), radial-gradient(circle at 18% 72%, #3b82f629, #0000 30%), radial-gradient(circle at 82% 74%, #f9731624, #0000 30%), #07080d;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(18px, 4vh, 36px);
+}
+
+.results-header {
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  display: flex;
+}
+
+.results-main-title {
+  color: #fff;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-shadow: 0 22px 70px #0000006b;
+  font-size: clamp(3rem, 8vw, 6.5rem);
+  font-weight: 1000;
+  line-height: .9;
+}
+
+.podium-stage {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.16fr) minmax(0, 1fr);
+  align-items: end;
+  gap: clamp(12px, 2.5vw, 28px);
+  width: min(1050px, 100%);
+  min-height: min(56vh, 520px);
+  display: grid;
+}
+
+.podium-slot {
+  opacity: 0;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 0;
+  transition: opacity .7s, transform .7s cubic-bezier(.17, .84, .44, 1);
+  display: flex;
+  transform: translateY(34px)scale(.94);
+}
+
+.podium-slot.show {
+  opacity: 1;
+  transform: translateY(0)scale(1);
+}
+
+.podium-person {
+  -webkit-backdrop-filter: blur(20px);
+  background: #ffffff13;
+  border: 1px solid #ffffff24;
+  border-radius: 20px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: min(100%, 310px);
+  margin-bottom: 14px;
+  padding: 18px 16px;
+  display: flex;
+  box-shadow: inset 0 1px #ffffff1f, 0 24px 70px #00000047;
+}
+
+.podium-emoji {
+  background: #ffffff1c;
+  border-radius: 26px;
+  place-items: center;
+  width: clamp(74px, 9vw, 104px);
+  height: clamp(74px, 9vw, 104px);
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  display: grid;
+  box-shadow: inset 0 1px #ffffff29;
+}
+
+.podium-name {
+  color: #fff;
+  overflow-wrap: anywhere;
+  max-width: 100%;
+  font-size: clamp(1.28rem, 3vw, 2.15rem);
+  font-weight: 950;
+  line-height: 1.05;
+}
+
+.podium-score {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(.9rem, 1.6vw, 1.05rem);
+  font-weight: 850;
+}
+
+.podium-block {
+  background: linear-gradient(#ffffff1f, #ffffff0b);
+  border: 1px solid #ffffff24;
+  border-radius: 24px 24px 10px 10px;
+  place-items: center;
+  width: 100%;
+  min-height: 190px;
+  display: grid;
+  box-shadow: inset 0 1px #ffffff24, 0 28px 80px #0000005c;
+}
+
+.podium-block span {
+  color: #fff;
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 1000;
+  line-height: 1;
+}
+
+.place-1 .podium-block {
+  background: linear-gradient(#facc1561, #a162075c);
+  border-color: #facc1580;
+  min-height: 286px;
+}
+
+.place-1 .podium-person {
+  background: #facc151f;
+  border-color: #facc156b;
+}
+
+.place-2 .podium-block {
+  background: linear-gradient(#e2e8f04d, #47556957);
+  min-height: 230px;
+}
+
+.place-3 .podium-block {
+  background: linear-gradient(#d977064d, #78350f57);
+  border-color: #fbbf2442;
+  min-height: 176px;
+}
+
+.podium-placeholder {
+  min-height: 260px;
+}
+
+.results-actions {
+  border-top: 0;
+  width: auto;
+  padding-top: 0;
+}
+
+.player-results-screen {
+  background: radial-gradient(circle at 50% 20%, #facc1533, transparent 34%),
+    radial-gradient(circle at 82% 78%, #22c55e1f, transparent 30%),
+    var(--bg);
+}
+
+@media (max-width: 720px) {
+  .podium-stage {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    min-height: 0;
+  }
+
+  .podium-slot {
+    flex-direction: row;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .podium-person {
+    flex: 1;
+    margin-bottom: 0;
+  }
+
+  .podium-block, .place-1 .podium-block, .place-2 .podium-block, .place-3 .podium-block {
+    border-radius: 18px;
+    width: 104px;
+    min-height: 138px;
+  }
 }
 
 .host-full-screen {
@@ -2965,6 +3139,7 @@ h3 {
 }
 
 .test-mode-toggle {
+  white-space: nowrap;
   background: #ffffff09;
   border-color: #ffffff1f;
 }
@@ -2973,6 +3148,10 @@ h3 {
   color: #fff;
   background: #facc151f;
   border-color: #facc1557;
+}
+
+.test-mode-toggle svg {
+  flex: none;
 }
 
 .stress-bot-btn {

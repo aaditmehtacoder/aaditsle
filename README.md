@@ -49,6 +49,24 @@ lib/quiz-data.ts
 
 Replace the placeholder questions, answer choices, stories, definitions, claims, and evidence there.
 
+Questions use this format. Put `correct: true` on the one right answer and `correct: false` on the other three:
+
+```ts
+question({
+  text: "Your new question?",
+  answers: [
+    { text: "Answer A", correct: false },
+    { text: "Answer B", correct: true },
+    { text: "Answer C", correct: false },
+    { text: "Answer D", correct: false }
+  ],
+  story: "What you want to say after revealing the answer.",
+  pointsMultiplier: 2
+})
+```
+
+Delete `pointsMultiplier: 2` if it should be a normal question instead of double points.
+
 ## Multiplayer Note
 
 This uses the Next.js server running on your computer as the shared game state. It is perfect for hosting locally on a laptop with iPads on the same Wi-Fi. If you deploy it to serverless hosting later, use Firebase, Supabase, or a WebSocket server for persistent shared state.
